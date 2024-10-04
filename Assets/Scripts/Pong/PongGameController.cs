@@ -9,6 +9,14 @@ public class PongGameController : MonoBehaviour
 
     public UnityEvent<int> playerScoreUpdated;
     public UnityEvent<int> opponentScoredUpdated;
+    
+    private AudioSource audioSource;
+    [SerializeField] private AudioClip goalScoredClip;
+
+    private void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
 
     // Called when any goal is scored to check for end game
     public void CheckEndgame()
@@ -21,6 +29,7 @@ public class PongGameController : MonoBehaviour
     {
         PlayerScore++;
         playerScoreUpdated.Invoke(PlayerScore);
+        audioSource.PlayOneShot(goalScoredClip);
         // Debug.Log($"Player Score: {PlayerScore}");
         CheckEndgame();
     }
@@ -30,6 +39,7 @@ public class PongGameController : MonoBehaviour
     {
         OpponentScore++;
         opponentScoredUpdated.Invoke(OpponentScore);
+        audioSource.PlayOneShot(goalScoredClip);
         // Debug.Log($"Opponent Score: {OpponentScore}");
         CheckEndgame();
     }

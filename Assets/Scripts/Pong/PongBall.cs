@@ -9,6 +9,14 @@ public class PongBall : MonoBehaviour
     public UnityEvent ballEnteredPlayerGoal;
     public UnityEvent ballEnteredOpponentGoal;
 
+    private AudioSource audioSource;
+    [SerializeField] private AudioClip bounceClip;
+
+    private void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -26,6 +34,11 @@ public class PongBall : MonoBehaviour
         // Assumes the player is on the left and fires towards the player that lost the last point
         var velRotation = Quaternion.Euler(0, 0, 45 * Mathf.Sign(Random.value - 0.5f));
         rigidbody.velocity = velRotation * new Vector3((playerLost ? -1 : 1) * settings.initialBallSpeed,0);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        audioSource.PlayOneShot(bounceClip);
     }
 
     private void OnTriggerEnter(Collider other)
