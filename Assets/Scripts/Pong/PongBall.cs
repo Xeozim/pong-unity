@@ -10,7 +10,7 @@ public class PongBall : MonoBehaviour
     void Start()
     {
         // Initialise in a random position on the y axis
-        var yInitial = UnityEngine.Random.Range(settings.yMinimum + transform.localScale.y, settings.yMaxmium - transform.localScale.y);
+        var yInitial = Random.Range(settings.yMinimum + transform.localScale.y, settings.yMaxmium - transform.localScale.y);
         transform.position = new Vector3(0,yInitial,0);
 
         // Initialise moving at 45 degrees either up or down
