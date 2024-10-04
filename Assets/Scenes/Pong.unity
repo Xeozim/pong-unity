@@ -261,6 +261,7 @@ GameObject:
   - component: {fileID: 875917289}
   - component: {fileID: 875917288}
   - component: {fileID: 875917287}
+  - component: {fileID: 875917290}
   m_Layer: 0
   m_Name: Ball
   m_TagString: Untagged
@@ -355,6 +356,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 875917285}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &875917290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 875917285}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1663fd462be0348499d89c9fda5f8dc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  settings: {fileID: 11400000, guid: 32e43cbd49924d84c9723bdb849af1d9, type: 2}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -566,9 +580,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 949e93aadc1fd77488b5c9a05f7ed32b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
-  yMinimum: -5
-  yMaxmium: 5
+  settings: {fileID: 11400000, guid: 32e43cbd49924d84c9723bdb849af1d9, type: 2}
 --- !u!1 &1430277215
 GameObject:
   m_ObjectHideFlags: 0

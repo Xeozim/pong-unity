@@ -5,14 +5,12 @@ public class PongPlayer : MonoBehaviour
 {
     private PongControls controls;
     private float moveInput;
-    [SerializeField] private float moveSpeed;
-    [SerializeField] private float yMinimum;
-    [SerializeField] private float yMaxmium;
+
+    [SerializeField] private PongSettings settings;
 
     private void Awake(){
         controls = new PongControls();
     }
-
 
     private void OnEnable()
     {
@@ -39,8 +37,8 @@ public class PongPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        var velocity = moveInput * moveSpeed;
-        var newYPosition = Mathf.Clamp(transform.position.y + velocity * Time.deltaTime, yMinimum, yMaxmium);
+        var velocity = moveInput * settings.paddleSpeed;
+        var newYPosition = Mathf.Clamp(transform.position.y + velocity * Time.deltaTime, settings.yMinimum, settings.yMaxmium);
 
         transform.position = new Vector3(transform.position.x,newYPosition,transform.position.z);
     }
