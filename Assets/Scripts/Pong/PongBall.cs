@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -13,22 +14,43 @@ public class PongBall : MonoBehaviour
 
     public Vector3 Velocity {get; private set;}
 
+    new MeshRenderer renderer;
+    private bool waitingToReset = false;
+
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
+        renderer = GetComponent<MeshRenderer>();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        ResetBall(true);
+        ResetBall(true, true);
     }
 
     void Update(){
+        if (waitingToReset) { return; }
+
         transform.position += Velocity * Time.deltaTime;
     }
 
-    public void ResetBall(bool playerLost)
+    // Coroutine that disables the GameObject, waits for a period, and then re-enables it
+    private IEnumerator ResetWait(float seconds)
+    {
+        // Disable the GameObject visuals and set the wait flag
+        renderer.enabled = false;
+        waitingToReset = true;
+
+        // Wait for the specified duration
+        yield return new WaitForSeconds(seconds);
+
+        // Re-enable
+        renderer.enabled = true;
+        waitingToReset = false;
+    }
+
+    public void ResetBall(bool playerLost, bool skipWait = false)
     {
         // Initialise in a random position on the y axis
         var yInitial = Random.Range(settings.yMinimum + transform.localScale.y, settings.yMaxmium - transform.localScale.y);
@@ -38,6 +60,8 @@ public class PongBall : MonoBehaviour
         // Assumes the player is on the left and fires towards the player that lost the last point
         var velRotation = Quaternion.Euler(0, 0, 45 * Mathf.Sign(Random.value - 0.5f));
         Velocity = velRotation * new Vector3((playerLost ? -1 : 1) * settings.initialBallSpeed,0);
+
+        if (!skipWait) { StartCoroutine(ResetWait(settings.resetWait)); }
     }
 
     private void OnCollisionEnter(Collision collision)
