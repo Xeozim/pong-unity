@@ -6,6 +6,10 @@ TagManager:
   tags:
   - PlayerGoal
   - OpponentGoal
+  - Ball
+  - PlayerPaddle
+  - OpponentPaddle
+  - Barrier
   layers:
   - Default
   - TransparentFX

@@ -42,6 +42,7 @@ public class PongBall : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        // Debug.Log("Ball collision!");
         // Bounce off in the opposite direction of the collision (average normal if two surfaces hit
         // simultaneously) with perfect energy conservation and play a noise
         Vector3 collisionNormal = Vector3.zero;
@@ -56,6 +57,7 @@ public class PongBall : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        // Debug.Log("Ball Trigger!");
         if (other.gameObject.CompareTag("PlayerGoal"))
         {
             // Debug.Log("Ball entered the PlayerGoal trigger zone!");
