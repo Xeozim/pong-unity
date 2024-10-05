@@ -395,6 +395,7 @@ GameObject:
   - component: {fileID: 450033770}
   - component: {fileID: 450033769}
   - component: {fileID: 450033768}
+  - component: {fileID: 450033771}
   m_Layer: 0
   m_Name: OpponentPaddle
   m_TagString: OpponentPaddle
@@ -489,6 +490,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 450033765}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &450033771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 450033765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe15b9c32096e334baa2f2e5f72f23e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  settings: {fileID: 11400000, guid: 32e43cbd49924d84c9723bdb849af1d9, type: 2}
 --- !u!1 &579300013
 GameObject:
   m_ObjectHideFlags: 0
