@@ -4,13 +4,14 @@ using UnityEngine.Events;
 public class PongBall : MonoBehaviour
 {
     [SerializeField] private PongSettings settings;
-    new Rigidbody rigidbody;
 
     public UnityEvent ballEnteredPlayerGoal;
     public UnityEvent ballEnteredOpponentGoal;
 
     private AudioSource audioSource;
     [SerializeField] private AudioClip bounceClip;
+
+    public Vector3 Velocity {get; private set;}
 
     private void Awake()
     {
@@ -20,8 +21,11 @@ public class PongBall : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        rigidbody = GetComponent<Rigidbody>();
         ResetBall(true);
+    }
+
+    void Update(){
+        transform.position += Velocity * Time.deltaTime;
     }
 
     public void ResetBall(bool playerLost)
@@ -33,11 +37,20 @@ public class PongBall : MonoBehaviour
         // Initialise moving at 45 degrees either up or down
         // Assumes the player is on the left and fires towards the player that lost the last point
         var velRotation = Quaternion.Euler(0, 0, 45 * Mathf.Sign(Random.value - 0.5f));
-        rigidbody.velocity = velRotation * new Vector3((playerLost ? -1 : 1) * settings.initialBallSpeed,0);
+        Velocity = velRotation * new Vector3((playerLost ? -1 : 1) * settings.initialBallSpeed,0);
     }
 
     private void OnCollisionEnter(Collision collision)
     {
+        // Bounce off in the opposite direction of the collision (average normal if two surfaces hit
+        // simultaneously) with perfect energy conservation and play a noise
+        Vector3 collisionNormal = Vector3.zero;
+        for (int i = 0; i < collision.contactCount; i++)
+        {
+            collisionNormal += collision.GetContact(0).normal;
+        }
+        collisionNormal /= collision.contactCount;
+        Velocity = Vector3.Reflect(Velocity, collisionNormal);
         audioSource.PlayOneShot(bounceClip);
     }
 
