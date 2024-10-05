@@ -9,7 +9,8 @@ TagManager:
   - Ball
   - PlayerPaddle
   - OpponentPaddle
-  - Barrier
+  - BarrierVertical
+  - BarrierHorizontal
   layers:
   - Default
   - TransparentFX
