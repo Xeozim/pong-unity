@@ -68,7 +68,7 @@ public class PongBall : MonoBehaviour
 
         // Initialise moving at 60 degrees either up or down
         // Assumes the player is on the left and fires towards the player that lost the last point
-        var velRotation = Quaternion.Euler(0, 0, 60 * Mathf.Sign(Random.value - 0.5f));
+        var velRotation = Quaternion.Euler(0, 0, settings.initialBallAngle * Mathf.Sign(Random.value - 0.5f));
         Velocity = velRotation * new Vector3((playerLost ? -1 : 1) * settings.initialBallSpeed,0);
 
         if (!skipWait) { StartCoroutine(ResetWait(settings.resetWait)); }
@@ -77,8 +77,7 @@ public class PongBall : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         // Debug.Log("Ball collision!");
-        // Bounce off in the opposite direction of the collision (average normal if two surfaces hit
-        // simultaneously) with perfect energy conservation and play a noise
+        // average normal in case multiple surfaces hit simultaneously
         Vector3 collisionNormal = Vector3.zero;
         for (int i = 0; i < collision.contactCount; i++)
         {
@@ -86,6 +85,37 @@ public class PongBall : MonoBehaviour
         }
         collisionNormal /= collision.contactCount;
         Velocity = Vector3.Reflect(Velocity, collisionNormal);
+
+        if (collision.gameObject.CompareTag("PlayerPaddle") || collision.gameObject.CompareTag("OpponentPaddle"))
+        {
+            // Debug.Log("Ball-paddle collision.");
+            // Debug.Log($"Velocity: {Velocity}");
+            // For paddle collisions, the angle of reflection increases the
+            // further from the centre of the paddle the impact is. We increase
+            // the y velocity when the impact is high on the paddle, and
+            // decrease it when it's low
+            var impactHeightRatio = (transform.position.y - collision.transform.position.y) / (settings.paddleHeight * 0.25f);
+            // Debug.Log($"impactHeightRatio: {impactHeightRatio}");
+            var velY = Velocity.y + (impactHeightRatio * Mathf.Abs(Velocity.y));
+            // Debug.Log($"velY: {velY}");
+
+            // Limit the angle of the velocity by increasing x velocity
+            var signX = Mathf.Sign(Velocity.x);
+            // Debug.Log($"signX: {signX}");
+            var vXMin = velY / Mathf.Tan(settings.maximumBallAngle);
+            // Debug.Log($"vXMin: {vXMin}");
+            var velX = Mathf.Max(Mathf.Abs(Velocity.x),Mathf.Abs(vXMin)) * signX;
+            // Debug.Log($"velX: {velX}");
+
+            Velocity = new Vector3(velX, velY, 0);
+        }
+
+        // Limit the speed
+        if (Velocity.magnitude > settings.maximumBallSpeed) { 
+            Velocity = Velocity.normalized * settings.maximumBallSpeed;
+        }
+
+        // Play a noise if the game isn't over
         if (!gameOver) { audioSource.PlayOneShot(bounceClip); }
     }
 

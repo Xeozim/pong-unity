@@ -12,9 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62d2868922512c940a19c0bbc27ec2e2, type: 3}
   m_Name: PongSettings
   m_EditorClassIdentifier: 
-  initialBallSpeed: 15
+  initialBallSpeed: 7.5
   maximumBallSpeed: 15
-  paddleSpeed: 5
+  initialBallAngle: 50
+  maximumBallAngle: 75
+  ballSpeedIncreaseOnPaddleHit: 0.1
+  paddleWidth: 0.2
+  paddleHeight: 1
+  paddleSpeed: 7.5
   yMinimum: -5
   yMaxmium: 5
   resetWait: 0.5

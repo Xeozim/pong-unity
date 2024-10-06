@@ -30,7 +30,7 @@ public class PongPlayer : MonoBehaviour
     }
 
     private void Update(){
-        transform.localScale.Set(settings.paddleWidth,settings.paddleHeight,1);
+        transform.localScale = new Vector3(settings.paddleWidth,settings.paddleHeight,1);
     }
 
     private void OnDisable()

@@ -5,6 +5,9 @@ public class PongSettings : ScriptableObject
 {
     public float initialBallSpeed;
     public float maximumBallSpeed;
+    public float initialBallAngle;
+    public float maximumBallAngle;
+    public float ballSpeedIncreaseOnPaddleHit;
     public float paddleWidth;
     public float paddleHeight;
     public float paddleSpeed;
