@@ -16,6 +16,7 @@ public class PongBall : MonoBehaviour
 
     new MeshRenderer renderer;
     private bool waitingToReset = false;
+    private bool gameOver = false;
 
     private void Awake()
     {
@@ -33,6 +34,15 @@ public class PongBall : MonoBehaviour
         if (waitingToReset) { return; }
 
         transform.position += Velocity * Time.fixedDeltaTime;
+    }
+
+    public void OnGameOverStateUpdated(bool isGameOver)
+    {
+        gameOver = isGameOver;
+        if (!isGameOver) {
+            // Game was restarted, reset the ball
+            ResetBall(true);
+        }
     }
 
     // Coroutine that disables the GameObject, waits for a period, and then re-enables it
@@ -56,9 +66,9 @@ public class PongBall : MonoBehaviour
         var yInitial = Random.Range(settings.yMinimum + transform.localScale.y, settings.yMaxmium - transform.localScale.y);
         transform.position = new Vector3(0,yInitial,0);
 
-        // Initialise moving at 45 degrees either up or down
+        // Initialise moving at 60 degrees either up or down
         // Assumes the player is on the left and fires towards the player that lost the last point
-        var velRotation = Quaternion.Euler(0, 0, 45 * Mathf.Sign(Random.value - 0.5f));
+        var velRotation = Quaternion.Euler(0, 0, 60 * Mathf.Sign(Random.value - 0.5f));
         Velocity = velRotation * new Vector3((playerLost ? -1 : 1) * settings.initialBallSpeed,0);
 
         if (!skipWait) { StartCoroutine(ResetWait(settings.resetWait)); }
@@ -76,7 +86,7 @@ public class PongBall : MonoBehaviour
         }
         collisionNormal /= collision.contactCount;
         Velocity = Vector3.Reflect(Velocity, collisionNormal);
-        audioSource.PlayOneShot(bounceClip);
+        if (!gameOver) { audioSource.PlayOneShot(bounceClip); }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -85,11 +95,15 @@ public class PongBall : MonoBehaviour
         if (other.gameObject.CompareTag("PlayerGoal"))
         {
             // Debug.Log("Ball entered the PlayerGoal trigger zone!");
+            // Ignore goals if game is over
+            if (gameOver) {return;}
             ballEnteredPlayerGoal.Invoke();
             ResetBall(true);
         } else if (other.gameObject.CompareTag("OpponentGoal"))
         {
             // Debug.Log("Ball entered the OpponentGoal trigger zone!");
+            // Ignore goals if game is over
+            if (gameOver) {return;}
             ballEnteredOpponentGoal.Invoke();
             ResetBall(false);
         }

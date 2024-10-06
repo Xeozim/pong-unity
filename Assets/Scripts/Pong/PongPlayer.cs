@@ -1,8 +1,14 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PongPlayer : MonoBehaviour
 {
+    new MeshRenderer renderer;
+    private List<Collider> colliders;
+
     private PongControls controls;
     private float moveInput;
 
@@ -10,6 +16,8 @@ public class PongPlayer : MonoBehaviour
 
     private void Awake(){
         controls = new PongControls();
+        renderer = GetComponent<MeshRenderer>();
+        colliders = GetComponents<Collider>().ToList();
     }
 
     private void OnEnable()
@@ -26,6 +34,17 @@ public class PongPlayer : MonoBehaviour
     {
         // Disable input actions
         controls.Player.Disable();
+    }
+
+    public void OnGameOverStateUpdated(bool isGameOver)
+    {
+        renderer.enabled = !isGameOver;
+        colliders.Select(c => c.enabled = !isGameOver);
+
+        if (!isGameOver) {
+            // Game was restarted, reset to the centre of the screen
+            transform.position = new Vector3(transform.position.x,0,transform.position.z);
+        }
     }
 
     // Method for handling movement input
