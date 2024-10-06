@@ -13,8 +13,8 @@ public class PongAI : MonoBehaviour
         targetPosition = transform.position;
     }
 
-    // Update is called once per frame
-    void Update()
+    // FixedUpdate is called at the same rate as the physics system update
+    void FixedUpdate()
     {
         // If the ball is moving away from us, move towards the centre of the screen
         if (ball.Velocity.x < 0)
@@ -36,7 +36,7 @@ public class PongAI : MonoBehaviour
         var velocity = Mathf.Clamp((targetPosition.y - transform.position.y) * 2, -settings.paddleSpeed, settings.paddleSpeed);
 
         // Update position, clamping to game limits
-        var newYPosition = Mathf.Clamp(transform.position.y + velocity * Time.deltaTime, settings.yMinimum, settings.yMaxmium);
+        var newYPosition = Mathf.Clamp(transform.position.y + velocity * Time.fixedDeltaTime, settings.yMinimum, settings.yMaxmium);
         transform.position = new Vector3(transform.position.x,newYPosition,transform.position.z);
     }
 }

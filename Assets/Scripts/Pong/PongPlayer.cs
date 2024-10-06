@@ -34,11 +34,11 @@ public class PongPlayer : MonoBehaviour
         moveInput = context.ReadValue<float>();
     }
 
-    // Update is called once per frame
-    void Update()
+    // FixedUpdate is called at the same rate as the physics system update
+    void FixedUpdate()
     {
         var velocity = moveInput * settings.paddleSpeed;
-        var newYPosition = Mathf.Clamp(transform.position.y + velocity * Time.deltaTime, settings.yMinimum, settings.yMaxmium);
+        var newYPosition = Mathf.Clamp(transform.position.y + velocity * Time.fixedDeltaTime, settings.yMinimum, settings.yMaxmium);
 
         transform.position = new Vector3(transform.position.x,newYPosition,transform.position.z);
     }
