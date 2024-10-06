@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -28,6 +27,10 @@ public class PongPlayer : MonoBehaviour
         // Subscribe to the input actions
         controls.Player.Move.performed += OnMove;
         controls.Player.Move.canceled += OnMove;
+    }
+
+    private void Update(){
+        transform.localScale.Set(settings.paddleWidth,settings.paddleHeight,1);
     }
 
     private void OnDisable()

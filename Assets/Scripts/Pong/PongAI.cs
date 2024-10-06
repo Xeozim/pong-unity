@@ -23,6 +23,11 @@ public class PongAI : MonoBehaviour
         ball = GameObject.FindGameObjectWithTag("Ball").GetComponent<PongBall>();
         targetPosition = transform.position;
     }
+    
+    private void Update()
+    {
+        transform.localScale.Set(settings.paddleWidth,settings.paddleHeight,1);
+    }
 
     public void OnGameOverStateUpdated(bool isGameOver)
     {
