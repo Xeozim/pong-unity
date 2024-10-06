@@ -29,10 +29,10 @@ public class PongBall : MonoBehaviour
         ResetBall(true, true);
     }
 
-    void Update(){
+    void FixedUpdate(){
         if (waitingToReset) { return; }
 
-        transform.position += Velocity * Time.deltaTime;
+        transform.position += Velocity * Time.fixedDeltaTime;
     }
 
     // Coroutine that disables the GameObject, waits for a period, and then re-enables it
