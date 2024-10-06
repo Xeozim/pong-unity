@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PongAI : MonoBehaviour
@@ -7,10 +9,30 @@ public class PongAI : MonoBehaviour
     private PongBall ball;
     private Vector3 targetPosition;
 
+    new MeshRenderer renderer;
+    private List<Collider> colliders;
+
+    private void Awake()
+    {
+        renderer = GetComponent<MeshRenderer>();
+        colliders = GetComponents<Collider>().ToList();
+    }
+
     void Start()
     {
         ball = GameObject.FindGameObjectWithTag("Ball").GetComponent<PongBall>();
         targetPosition = transform.position;
+    }
+
+    public void OnGameOverStateUpdated(bool isGameOver)
+    {
+        renderer.enabled = !isGameOver;
+        colliders.Select(c => c.enabled = !isGameOver);
+
+        if (!isGameOver) {
+            // Game was restarted, reset to the centre of the screen
+            transform.position = new Vector3(transform.position.x,0,transform.position.z);
+        }
     }
 
     // FixedUpdate is called at the same rate as the physics system update
