@@ -82,7 +82,7 @@ public class PongBall : MonoBehaviour
         Vector3 collisionNormal = Vector3.zero;
         for (int i = 0; i < collision.contactCount; i++)
         {
-            collisionNormal += collision.GetContact(0).normal;
+            collisionNormal += collision.GetContact(i).normal;
         }
         collisionNormal /= collision.contactCount;
         Velocity = Vector3.Reflect(Velocity, collisionNormal);
