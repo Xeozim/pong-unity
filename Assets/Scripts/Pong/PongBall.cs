@@ -84,36 +84,46 @@ public class PongBall : MonoBehaviour
             collisionNormal += collision.GetContact(i).normal;
         }
         collisionNormal /= collision.contactCount;
-        Velocity = Vector3.Reflect(Velocity, collisionNormal);
 
+        var newVelocity = Vector3.Reflect(Velocity, collisionNormal);
+
+        // We ignore paddle collisions if the axis of the collision (collision normal) has a
+        // significant vertical component (i.e. the ball hit the top or bottom of a paddle).
         if (collision.gameObject.CompareTag("PlayerPaddle") || collision.gameObject.CompareTag("OpponentPaddle"))
         {
-            // Debug.Log("Ball-paddle collision.");
-            // Debug.Log($"Velocity: {Velocity}");
+            if (Mathf.Abs(collisionNormal.y) > 0.5) { return; }
+
             // For paddle collisions, the angle of reflection increases the
             // further from the centre of the paddle the impact is. We increase
             // the y velocity when the impact is high on the paddle, and
-            // decrease it when it's low
+            // decrease it when it's low.
+            // Debug.Log("====================================");
+            // Debug.Log("Ball-paddle collision.");
+            // Debug.Log($"collisionNormal: {collisionNormal}");
+            // Debug.Log($"newVelocity: {newVelocity}");
             var impactHeightRatio = (transform.position.y - collision.transform.position.y) / (settings.paddleHeight * 0.25f);
             // Debug.Log($"impactHeightRatio: {impactHeightRatio}");
-            var velY = Velocity.y + (impactHeightRatio * Mathf.Abs(Velocity.y));
+            var velY = newVelocity.y + (impactHeightRatio * 0.5f * Mathf.Abs(newVelocity.y));
             // Debug.Log($"velY: {velY}");
 
             // Limit the angle of the velocity by increasing x velocity
-            var signX = Mathf.Sign(Velocity.x);
+            var signX = Mathf.Sign(newVelocity.x);
             // Debug.Log($"signX: {signX}");
             var vXMin = velY / Mathf.Tan(settings.maximumBallAngle);
             // Debug.Log($"vXMin: {vXMin}");
-            var velX = Mathf.Max(Mathf.Abs(Velocity.x),Mathf.Abs(vXMin)) * signX;
+            var velX = Mathf.Min(Mathf.Abs(newVelocity.x),Mathf.Abs(vXMin)) * signX;
             // Debug.Log($"velX: {velX}");
 
-            Velocity = new Vector3(velX, velY, 0);
+            newVelocity = new Vector3(velX, velY, 0);
         }
 
         // Limit the speed
-        if (Velocity.magnitude > settings.maximumBallSpeed) { 
-            Velocity = Velocity.normalized * settings.maximumBallSpeed;
+        if (newVelocity.magnitude > settings.maximumBallSpeed) { 
+            newVelocity = newVelocity.normalized * settings.maximumBallSpeed;
         }
+
+        // Apply the calculated velocity
+        Velocity = newVelocity;
 
         // Play a noise if the game isn't over
         if (!gameOver) { audioSource.PlayOneShot(bounceClip); }
