@@ -24,7 +24,7 @@ public class PongPaddle : MonoBehaviour
 
     public void OnGameOverStateUpdated(bool isGameOver)
     {
-        Debug.Log($"OnGameOverStateUpdated ({isGameOver}) called on {transform.name}");
+        // Debug.Log($"OnGameOverStateUpdated ({isGameOver}) called on {transform.name}");
         foreach (var renderer in renderers)
         {
             renderer.enabled = !isGameOver;
