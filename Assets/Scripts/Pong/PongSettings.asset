@@ -24,4 +24,4 @@ MonoBehaviour:
   yMinimum: -5
   yMaxmium: 5
   resetWait: 0.5
-  winningScore: 3
+  winningScore: 11
