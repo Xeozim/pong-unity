@@ -28,16 +28,7 @@ public partial class @PongControls: IInputActionCollection2, IDisposable
             ""id"": ""5407bbdf-af47-489f-8f2d-522fe5a7499c"",
             ""actions"": [
                 {
-                    ""name"": ""MoveRelative"",
-                    ""type"": ""Value"",
-                    ""id"": ""2759521c-a9fa-4e8f-a93b-78b818bedc3a"",
-                    ""expectedControlType"": ""Axis"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""MoveAbsolute"",
+                    ""name"": ""Move"",
                     ""type"": ""Value"",
                     ""id"": ""fae8b3ea-1bdf-45c1-99a3-d4c16518f272"",
                     ""expectedControlType"": ""Axis"",
@@ -48,79 +39,24 @@ public partial class @PongControls: IInputActionCollection2, IDisposable
             ],
             ""bindings"": [
                 {
-                    ""name"": ""WASD"",
-                    ""id"": ""f1b6cfbd-5189-4a26-b79b-885fab833355"",
-                    ""path"": ""1DAxis"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""MoveRelative"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""Negative"",
-                    ""id"": ""9e321953-7144-44ff-9749-b7a45f329608"",
-                    ""path"": ""<Keyboard>/s"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""MoveRelative"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""Positive"",
-                    ""id"": ""811b79b9-90cb-4363-80c0-96327f50239c"",
-                    ""path"": ""<Keyboard>/w"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""MoveRelative"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""Arrows"",
-                    ""id"": ""7daa3f39-96c8-4395-a120-b7826df3a883"",
-                    ""path"": ""1DAxis"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""MoveRelative"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""negative"",
-                    ""id"": ""39647828-1db3-42ff-9d56-91f9469083d3"",
-                    ""path"": ""<Keyboard>/downArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""MoveRelative"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""positive"",
-                    ""id"": ""418a6c2a-090b-41c4-ab90-30490b8197fa"",
-                    ""path"": ""<Keyboard>/upArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""MoveRelative"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
                     ""name"": """",
                     ""id"": ""1ca6c7c0-a593-4635-8046-b11ea848357d"",
                     ""path"": ""<Touchscreen>/position/y"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""MoveAbsolute"",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4fee7287-ec26-40a4-8cfd-4d3d1e60711d"",
+                    ""path"": ""<Mouse>/position/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -131,9 +67,75 @@ public partial class @PongControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""MoveAbsolute"",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""WASD"",
+                    ""id"": ""f1b6cfbd-5189-4a26-b79b-885fab833355"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Negative"",
+                    ""id"": ""9e321953-7144-44ff-9749-b7a45f329608"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Positive"",
+                    ""id"": ""811b79b9-90cb-4363-80c0-96327f50239c"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Arrows"",
+                    ""id"": ""7daa3f39-96c8-4395-a120-b7826df3a883"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""39647828-1db3-42ff-9d56-91f9469083d3"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""418a6c2a-090b-41c4-ab90-30490b8197fa"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -192,8 +194,7 @@ public partial class @PongControls: IInputActionCollection2, IDisposable
 }");
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
-        m_Player_MoveRelative = m_Player.FindAction("MoveRelative", throwIfNotFound: true);
-        m_Player_MoveAbsolute = m_Player.FindAction("MoveAbsolute", throwIfNotFound: true);
+        m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         // Menu
         m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
         m_Menu_Restart = m_Menu.FindAction("Restart", throwIfNotFound: true);
@@ -264,14 +265,12 @@ public partial class @PongControls: IInputActionCollection2, IDisposable
     // Player
     private readonly InputActionMap m_Player;
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
-    private readonly InputAction m_Player_MoveRelative;
-    private readonly InputAction m_Player_MoveAbsolute;
+    private readonly InputAction m_Player_Move;
     public struct PlayerActions
     {
         private @PongControls m_Wrapper;
         public PlayerActions(@PongControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @MoveRelative => m_Wrapper.m_Player_MoveRelative;
-        public InputAction @MoveAbsolute => m_Wrapper.m_Player_MoveAbsolute;
+        public InputAction @Move => m_Wrapper.m_Player_Move;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -281,22 +280,16 @@ public partial class @PongControls: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_PlayerActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_PlayerActionsCallbackInterfaces.Add(instance);
-            @MoveRelative.started += instance.OnMoveRelative;
-            @MoveRelative.performed += instance.OnMoveRelative;
-            @MoveRelative.canceled += instance.OnMoveRelative;
-            @MoveAbsolute.started += instance.OnMoveAbsolute;
-            @MoveAbsolute.performed += instance.OnMoveAbsolute;
-            @MoveAbsolute.canceled += instance.OnMoveAbsolute;
+            @Move.started += instance.OnMove;
+            @Move.performed += instance.OnMove;
+            @Move.canceled += instance.OnMove;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
         {
-            @MoveRelative.started -= instance.OnMoveRelative;
-            @MoveRelative.performed -= instance.OnMoveRelative;
-            @MoveRelative.canceled -= instance.OnMoveRelative;
-            @MoveAbsolute.started -= instance.OnMoveAbsolute;
-            @MoveAbsolute.performed -= instance.OnMoveAbsolute;
-            @MoveAbsolute.canceled -= instance.OnMoveAbsolute;
+            @Move.started -= instance.OnMove;
+            @Move.performed -= instance.OnMove;
+            @Move.canceled -= instance.OnMove;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -362,8 +355,7 @@ public partial class @PongControls: IInputActionCollection2, IDisposable
     public MenuActions @Menu => new MenuActions(this);
     public interface IPlayerActions
     {
-        void OnMoveRelative(InputAction.CallbackContext context);
-        void OnMoveAbsolute(InputAction.CallbackContext context);
+        void OnMove(InputAction.CallbackContext context);
     }
     public interface IMenuActions
     {
