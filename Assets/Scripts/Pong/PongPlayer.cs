@@ -7,7 +7,6 @@ public class PongPlayer : PongPaddle
     private float moveInput;
 
     private void Awake(){
-        GetComponentReferences();
         controls = new PongControls();
     }
 
@@ -17,10 +16,15 @@ public class PongPlayer : PongPaddle
         controls.Player.Enable();
 
         // Subscribe to the input actions
-        controls.Player.Move.performed += OnMove;
-        controls.Player.Move.canceled += OnMove;
+        controls.Player.MoveRelative.performed += OnRelativeMoveInput;
+        controls.Player.MoveRelative.canceled += OnRelativeMoveInput;
+
+        controls.Player.MoveAbsolute.performed += OnAbsoluteMoveInput;
+        controls.Player.MoveAbsolute.canceled += OnAbsoluteMoveInput;
     }
 
+    // For paddle classes, update is used to set the target position. The parent class will move
+    // the paddle to reach this position in it's FixedUpdate function.
     private void Update(){
         SettingsRefresh();
     }
@@ -31,18 +35,28 @@ public class PongPlayer : PongPaddle
         controls.Player.Disable();
     }
 
-    // Method for handling movement input
-    private void OnMove(InputAction.CallbackContext context)
+    // Method for handling movement input from relative sources e.g. when the up arrow is pressed
+    // we should always try to move the paddle up relative to where it is now.
+    private void OnRelativeMoveInput(InputAction.CallbackContext context)
     {
         moveInput = context.ReadValue<float>();
+        // Target position is relative to current position
+        targetPosition = new Vector3(
+            paddle.transform.position.x,
+            paddle.transform.position.y + (settings.paddleSpeed * moveInput),
+            paddle.transform.position.z
+        );
     }
 
-    // FixedUpdate is called at the same rate as the physics system update
-    void FixedUpdate()
+    // Method for handling movement input from absolute sources e.g. we should always aim to match
+    // the current position of the gamepad joystick.
+    private void OnAbsoluteMoveInput(InputAction.CallbackContext context)
     {
-        var velocity = moveInput * settings.paddleSpeed;
-        var newYPosition = Mathf.Clamp(paddle.transform.position.y + velocity * Time.fixedDeltaTime, settings.yMinimum, settings.yMaxmium);
-
-        paddle.transform.position = new Vector3(paddle.transform.position.x,newYPosition,paddle.transform.position.z);
+        moveInput = context.ReadValue<float>();
+        targetPosition = new Vector3(
+            paddle.transform.position.x,
+            settings.yMinimum + ((moveInput + 1.0f) * 0.5f * (settings.yMaxmium - settings.yMinimum)),
+            paddle.transform.position.z
+        );
     }
 }

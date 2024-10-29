@@ -28,9 +28,18 @@ public partial class @PongControls: IInputActionCollection2, IDisposable
             ""id"": ""5407bbdf-af47-489f-8f2d-522fe5a7499c"",
             ""actions"": [
                 {
-                    ""name"": ""Move"",
+                    ""name"": ""MoveRelative"",
                     ""type"": ""Value"",
                     ""id"": ""2759521c-a9fa-4e8f-a93b-78b818bedc3a"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""MoveAbsolute"",
+                    ""type"": ""Value"",
+                    ""id"": ""fae8b3ea-1bdf-45c1-99a3-d4c16518f272"",
                     ""expectedControlType"": ""Axis"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -45,95 +54,29 @@ public partial class @PongControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move"",
+                    ""action"": ""MoveRelative"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""negative"",
+                    ""name"": ""Negative"",
                     ""id"": ""9e321953-7144-44ff-9749-b7a45f329608"",
                     ""path"": ""<Keyboard>/s"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move"",
+                    ""action"": ""MoveRelative"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""positive"",
+                    ""name"": ""Positive"",
                     ""id"": ""811b79b9-90cb-4363-80c0-96327f50239c"",
                     ""path"": ""<Keyboard>/w"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""Gamepad"",
-                    ""id"": ""87e268a2-e1e6-42ef-aaf3-5292d8a01f5a"",
-                    ""path"": ""1DAxis"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""negative"",
-                    ""id"": ""2e41ff22-8d03-4a46-871b-343aed3c806c"",
-                    ""path"": ""<Gamepad>/leftStick/down"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""positive"",
-                    ""id"": ""55826a72-f2e6-406a-a5f0-ee7440414db6"",
-                    ""path"": ""<Gamepad>/leftStick/up"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""Touchscreen"",
-                    ""id"": ""126e9f7a-4f90-42b4-8d54-2c9cc19dd080"",
-                    ""path"": ""1DAxis"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""negative"",
-                    ""id"": ""55f0c679-1f86-41d2-8474-ad519dbc340a"",
-                    ""path"": ""<Touchscreen>/primaryTouch/delta/down"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""positive"",
-                    ""id"": ""b6d9bcb8-b0a7-4054-b06a-0931ec4e56b6"",
-                    ""path"": ""<Touchscreen>/primaryTouch/delta/up"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
+                    ""action"": ""MoveRelative"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -144,7 +87,7 @@ public partial class @PongControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move"",
+                    ""action"": ""MoveRelative"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -155,7 +98,7 @@ public partial class @PongControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move"",
+                    ""action"": ""MoveRelative"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -166,9 +109,31 @@ public partial class @PongControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move"",
+                    ""action"": ""MoveRelative"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1ca6c7c0-a593-4635-8046-b11ea848357d"",
+                    ""path"": ""<Touchscreen>/position/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MoveAbsolute"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7bb13d97-4cc5-4eb6-a92c-beb9bfa72656"",
+                    ""path"": ""<Gamepad>/leftStick/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MoveAbsolute"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -227,7 +192,8 @@ public partial class @PongControls: IInputActionCollection2, IDisposable
 }");
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
-        m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
+        m_Player_MoveRelative = m_Player.FindAction("MoveRelative", throwIfNotFound: true);
+        m_Player_MoveAbsolute = m_Player.FindAction("MoveAbsolute", throwIfNotFound: true);
         // Menu
         m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
         m_Menu_Restart = m_Menu.FindAction("Restart", throwIfNotFound: true);
@@ -298,12 +264,14 @@ public partial class @PongControls: IInputActionCollection2, IDisposable
     // Player
     private readonly InputActionMap m_Player;
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
-    private readonly InputAction m_Player_Move;
+    private readonly InputAction m_Player_MoveRelative;
+    private readonly InputAction m_Player_MoveAbsolute;
     public struct PlayerActions
     {
         private @PongControls m_Wrapper;
         public PlayerActions(@PongControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Move => m_Wrapper.m_Player_Move;
+        public InputAction @MoveRelative => m_Wrapper.m_Player_MoveRelative;
+        public InputAction @MoveAbsolute => m_Wrapper.m_Player_MoveAbsolute;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -313,16 +281,22 @@ public partial class @PongControls: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_PlayerActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_PlayerActionsCallbackInterfaces.Add(instance);
-            @Move.started += instance.OnMove;
-            @Move.performed += instance.OnMove;
-            @Move.canceled += instance.OnMove;
+            @MoveRelative.started += instance.OnMoveRelative;
+            @MoveRelative.performed += instance.OnMoveRelative;
+            @MoveRelative.canceled += instance.OnMoveRelative;
+            @MoveAbsolute.started += instance.OnMoveAbsolute;
+            @MoveAbsolute.performed += instance.OnMoveAbsolute;
+            @MoveAbsolute.canceled += instance.OnMoveAbsolute;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
         {
-            @Move.started -= instance.OnMove;
-            @Move.performed -= instance.OnMove;
-            @Move.canceled -= instance.OnMove;
+            @MoveRelative.started -= instance.OnMoveRelative;
+            @MoveRelative.performed -= instance.OnMoveRelative;
+            @MoveRelative.canceled -= instance.OnMoveRelative;
+            @MoveAbsolute.started -= instance.OnMoveAbsolute;
+            @MoveAbsolute.performed -= instance.OnMoveAbsolute;
+            @MoveAbsolute.canceled -= instance.OnMoveAbsolute;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -388,7 +362,8 @@ public partial class @PongControls: IInputActionCollection2, IDisposable
     public MenuActions @Menu => new MenuActions(this);
     public interface IPlayerActions
     {
-        void OnMove(InputAction.CallbackContext context);
+        void OnMoveRelative(InputAction.CallbackContext context);
+        void OnMoveAbsolute(InputAction.CallbackContext context);
     }
     public interface IMenuActions
     {

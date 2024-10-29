@@ -645,10 +645,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe15b9c32096e334baa2f2e5f72f23e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  paddle: {fileID: 450033766}
+  renderers:
+  - {fileID: 450033769}
   colliders:
   - {fileID: 1398238306}
   - {fileID: 613058004}
-  paddle: {fileID: 450033766}
   settings: {fileID: 11400000, guid: 32e43cbd49924d84c9723bdb849af1d9, type: 2}
 --- !u!1 &586123054
 GameObject:
@@ -1135,9 +1137,9 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 0
   m_IsKinematic: 0
-  m_Interpolate: 1
+  m_Interpolate: 2
   m_Constraints: 120
-  m_CollisionDetection: 1
+  m_CollisionDetection: 2
 --- !u!1 &956439575
 GameObject:
   m_ObjectHideFlags: 0
@@ -1310,10 +1312,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 949e93aadc1fd77488b5c9a05f7ed32b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  paddle: {fileID: 1297649056}
+  renderers:
+  - {fileID: 1297649054}
   colliders:
   - {fileID: 45740125}
   - {fileID: 1295834286}
-  paddle: {fileID: 1297649056}
   settings: {fileID: 11400000, guid: 32e43cbd49924d84c9723bdb849af1d9, type: 2}
 --- !u!1 &1295834284
 GameObject:
@@ -1713,8 +1717,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PongPlayer, Assembly-CSharp
+      - m_Target: {fileID: 1038640334}
+        m_TargetAssemblyTypeName: PongPaddle, Assembly-CSharp
         m_MethodName: OnGameOverStateUpdated
         m_Mode: 0
         m_Arguments:
@@ -1725,8 +1729,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PongAI, Assembly-CSharp
+      - m_Target: {fileID: 579300015}
+        m_TargetAssemblyTypeName: PongPaddle, Assembly-CSharp
         m_MethodName: OnGameOverStateUpdated
         m_Mode: 0
         m_Arguments:
