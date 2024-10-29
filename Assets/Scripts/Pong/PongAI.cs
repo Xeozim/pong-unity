@@ -9,7 +9,11 @@ public class PongAI : PongPaddle
         SettingsRefresh();
 
         // If the ball is moving away from us, move towards the centre of the screen
-        if (ball.Velocity.x < 0)
+        var ballToPaddleDirection = paddle.transform.position - ball.transform.position;
+        ballToPaddleDirection.Normalize();
+        var ballMovementDirection = ball.Velocity;
+        ballMovementDirection.Normalize();
+        if (Vector3.Dot(ballMovementDirection, ballToPaddleDirection) < 0)
         {
             targetPosition.y = 0;
         } else {
