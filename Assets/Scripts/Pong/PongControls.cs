@@ -51,17 +51,6 @@ public partial class @PongControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""4fee7287-ec26-40a4-8cfd-4d3d1e60711d"",
-                    ""path"": ""<Mouse>/position/y"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""7bb13d97-4cc5-4eb6-a92c-beb9bfa72656"",
                     ""path"": ""<Gamepad>/leftStick/y"",
                     ""interactions"": """",
@@ -130,6 +119,39 @@ public partial class @PongControls: IInputActionCollection2, IDisposable
                     ""name"": ""positive"",
                     ""id"": ""418a6c2a-090b-41c4-ab90-30490b8197fa"",
                     ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""One Modifier"",
+                    ""id"": ""ef845013-dd57-4440-bf02-d2334c7338f5"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""5d79ec06-ed60-4bd7-aa0e-d9dd98a76344"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""c71448bf-42ae-4917-a1ff-d44d8bc3438f"",
+                    ""path"": ""<Mouse>/position/y"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

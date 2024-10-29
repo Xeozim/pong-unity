@@ -38,19 +38,20 @@ public class PongPlayer : PongPaddle
     {
         moveInput = context.ReadValue<float>();
 
-        // Adjust mouse / touchscreen inputs to be relative to the screen
-        switch (context.control.device){
-            case Mouse:
-            case Touchscreen:
-                moveInput /= Screen.height;
-                break;
-            default:
-                break;
-        }
+        // Target y in range 0 (target = yMinimum) to 1 (target = yMaximum)
+        var yTarget01 = 0f;
 
+        // Adjust mouse / touchscreen inputs to be relative to the screen
+        yTarget01 = context.control.device switch
+        {
+            Mouse or Touchscreen => moveInput / Screen.height,
+            _ => (moveInput + 1.0f) * 0.5f,
+        };
+
+        // Set target position
         targetPosition = new Vector3(
             paddle.transform.position.x,
-            settings.yMinimum + ((moveInput + 1.0f) * 0.5f * (settings.yMaxmium - settings.yMinimum)),
+            settings.yMinimum + (yTarget01 * (settings.yMaxmium - settings.yMinimum)),
             paddle.transform.position.z
         );
     }

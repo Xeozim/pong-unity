@@ -16,7 +16,7 @@ public class PongBall : MonoBehaviour
 
     public Vector3 Velocity {get; private set;}
 
-    new MeshRenderer renderer;
+    new private MeshRenderer renderer;
     private bool waitingToReset = false;
     private bool gameOver = false;
 
