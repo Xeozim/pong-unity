@@ -1,43 +1,19 @@
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
-public class PongAI : MonoBehaviour
+public class PongAI : PongPaddle
 {
-    [SerializeField] private PongSettings settings;
-
     private PongBall ball;
     private Vector3 targetPosition;
-
-    new MeshRenderer renderer;
-    private List<Collider> colliders;
-
-    private void Awake()
-    {
-        renderer = GetComponent<MeshRenderer>();
-        colliders = GetComponents<Collider>().ToList();
-    }
 
     void Start()
     {
         ball = GameObject.FindGameObjectWithTag("Ball").GetComponent<PongBall>();
-        targetPosition = transform.position;
+        targetPosition = paddle.transform.position;
     }
     
     private void Update()
     {
-        transform.localScale = new Vector3(settings.paddleWidth,settings.paddleHeight,1);
-    }
-
-    public void OnGameOverStateUpdated(bool isGameOver)
-    {
-        renderer.enabled = !isGameOver;
-        colliders.Select(c => c.enabled = !isGameOver);
-
-        if (!isGameOver) {
-            // Game was restarted, reset to the centre of the screen
-            transform.position = new Vector3(transform.position.x,0,transform.position.z);
-        }
+        SettingsRefresh();
     }
 
     // FixedUpdate is called at the same rate as the physics system update
@@ -51,7 +27,7 @@ public class PongAI : MonoBehaviour
             // Predict the y impact of the ball and move towards that
             // Time until the ball reaches our x position (assumes we only move in y and that
             // the ball won't lose energy en route)  
-            var timeToIntercept = (transform.position.x - ball.transform.position.x) / ball.Velocity.x;
+            var timeToIntercept = (paddle.transform.position.x - ball.transform.position.x) / ball.Velocity.x;
 
             targetPosition.y = ball.transform.position.y + (ball.Velocity.y * timeToIntercept);
         }
@@ -60,10 +36,10 @@ public class PongAI : MonoBehaviour
         // Multiplying position offset by 2 means we use full speed unless the target position is
         // within paddleSpeed / 2 of the current. Really we should use the actual dimensions of the
         // paddle to control this because this behaviour will change with paddle speed.
-        var velocity = Mathf.Clamp((targetPosition.y - transform.position.y) * 2, -settings.paddleSpeed, settings.paddleSpeed);
+        var velocity = Mathf.Clamp((targetPosition.y - paddle.transform.position.y) * 2, -settings.paddleSpeed, settings.paddleSpeed);
 
         // Update position, clamping to game limits
-        var newYPosition = Mathf.Clamp(transform.position.y + velocity * Time.fixedDeltaTime, settings.yMinimum, settings.yMaxmium);
-        transform.position = new Vector3(transform.position.x,newYPosition,transform.position.z);
+        var newYPosition = Mathf.Clamp(paddle.transform.position.y + velocity * Time.fixedDeltaTime, settings.yMinimum, settings.yMaxmium);
+        paddle.transform.position = new Vector3(paddle.transform.position.x,newYPosition,paddle.transform.position.z);
     }
 }

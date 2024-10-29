@@ -1,22 +1,14 @@
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PongPlayer : MonoBehaviour
+public class PongPlayer : PongPaddle
 {
-    new MeshRenderer renderer;
-    private List<Collider> colliders;
-
     private PongControls controls;
     private float moveInput;
 
-    [SerializeField] private PongSettings settings;
-
     private void Awake(){
+        GetComponentReferences();
         controls = new PongControls();
-        renderer = GetComponent<MeshRenderer>();
-        colliders = GetComponents<Collider>().ToList();
     }
 
     private void OnEnable()
@@ -30,24 +22,13 @@ public class PongPlayer : MonoBehaviour
     }
 
     private void Update(){
-        transform.localScale = new Vector3(settings.paddleWidth,settings.paddleHeight,1);
+        SettingsRefresh();
     }
 
     private void OnDisable()
     {
         // Disable input actions
         controls.Player.Disable();
-    }
-
-    public void OnGameOverStateUpdated(bool isGameOver)
-    {
-        renderer.enabled = !isGameOver;
-        colliders.Select(c => c.enabled = !isGameOver);
-
-        if (!isGameOver) {
-            // Game was restarted, reset to the centre of the screen
-            transform.position = new Vector3(transform.position.x,0,transform.position.z);
-        }
     }
 
     // Method for handling movement input
@@ -60,8 +41,8 @@ public class PongPlayer : MonoBehaviour
     void FixedUpdate()
     {
         var velocity = moveInput * settings.paddleSpeed;
-        var newYPosition = Mathf.Clamp(transform.position.y + velocity * Time.fixedDeltaTime, settings.yMinimum, settings.yMaxmium);
+        var newYPosition = Mathf.Clamp(paddle.transform.position.y + velocity * Time.fixedDeltaTime, settings.yMinimum, settings.yMaxmium);
 
-        transform.position = new Vector3(transform.position.x,newYPosition,transform.position.z);
+        paddle.transform.position = new Vector3(paddle.transform.position.x,newYPosition,paddle.transform.position.z);
     }
 }

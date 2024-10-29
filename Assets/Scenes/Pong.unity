@@ -526,7 +526,6 @@ GameObject:
   - component: {fileID: 450033766}
   - component: {fileID: 450033770}
   - component: {fileID: 450033769}
-  - component: {fileID: 450033771}
   m_Layer: 0
   m_Name: Paddle
   m_TagString: OpponentPaddle
@@ -600,19 +599,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 450033765}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &450033771
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 450033765}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe15b9c32096e334baa2f2e5f72f23e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  settings: {fileID: 11400000, guid: 32e43cbd49924d84c9723bdb849af1d9, type: 2}
 --- !u!1 &579300013
 GameObject:
   m_ObjectHideFlags: 0
@@ -622,6 +608,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 579300014}
+  - component: {fileID: 579300015}
   m_Layer: 0
   m_Name: Opponent
   m_TagString: Untagged
@@ -646,6 +633,23 @@ Transform:
   - {fileID: 613058003}
   m_Father: {fileID: 1430277216}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &579300015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 579300013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe15b9c32096e334baa2f2e5f72f23e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colliders:
+  - {fileID: 1398238306}
+  - {fileID: 613058004}
+  paddle: {fileID: 450033766}
+  settings: {fileID: 11400000, guid: 32e43cbd49924d84c9723bdb849af1d9, type: 2}
 --- !u!1 &586123054
 GameObject:
   m_ObjectHideFlags: 0
@@ -1269,6 +1273,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1038640333}
+  - component: {fileID: 1038640334}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1293,6 +1298,23 @@ Transform:
   - {fileID: 1295834285}
   m_Father: {fileID: 1430277216}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1038640334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1038640332}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 949e93aadc1fd77488b5c9a05f7ed32b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colliders:
+  - {fileID: 45740125}
+  - {fileID: 1295834286}
+  paddle: {fileID: 1297649056}
+  settings: {fileID: 11400000, guid: 32e43cbd49924d84c9723bdb849af1d9, type: 2}
 --- !u!1 &1295834284
 GameObject:
   m_ObjectHideFlags: 0
@@ -1367,7 +1389,6 @@ GameObject:
   - component: {fileID: 1297649056}
   - component: {fileID: 1297649055}
   - component: {fileID: 1297649054}
-  - component: {fileID: 1297649057}
   m_Layer: 0
   m_Name: Paddle
   m_TagString: PlayerPaddle
@@ -1441,19 +1462,6 @@ Transform:
   - {fileID: 45740124}
   m_Father: {fileID: 1038640333}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1297649057
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1297649052}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 949e93aadc1fd77488b5c9a05f7ed32b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  settings: {fileID: 11400000, guid: 32e43cbd49924d84c9723bdb849af1d9, type: 2}
 --- !u!1 &1398238304
 GameObject:
   m_ObjectHideFlags: 0
@@ -1705,7 +1713,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1297649057}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: PongPlayer, Assembly-CSharp
         m_MethodName: OnGameOverStateUpdated
         m_Mode: 0
@@ -1717,7 +1725,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 450033771}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: PongAI, Assembly-CSharp
         m_MethodName: OnGameOverStateUpdated
         m_Mode: 0

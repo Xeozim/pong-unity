@@ -16,7 +16,7 @@ MonoBehaviour:
   maximumBallSpeed: 15
   initialBallAngle: 50
   maximumBallAngle: 50
-  maximumBallAngleChange: 20
+  maximumBallAngleChange: 50
   ballSpeedIncreaseOnPaddleHit: 0.1
   paddleWidth: 0.1
   paddleHeight: 1
