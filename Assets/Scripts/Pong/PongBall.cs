@@ -9,6 +9,8 @@ public class PongBall : MonoBehaviour
     public UnityEvent ballEnteredPlayerGoal;
     public UnityEvent ballEnteredOpponentGoal;
 
+    [SerializeField] private LayerMask collisionLayers;
+
     private AudioSource audioSource;
     [SerializeField] private AudioClip bounceClip;
 
@@ -28,12 +30,6 @@ public class PongBall : MonoBehaviour
     void Start()
     {
         ResetBall(true, true);
-    }
-
-    void FixedUpdate(){
-        if (waitingToReset) { return; }
-
-        transform.position += Velocity * Time.fixedDeltaTime;
     }
 
     public void OnGameOverStateUpdated(bool isGameOver)
@@ -74,112 +70,146 @@ public class PongBall : MonoBehaviour
         if (!skipWait) { StartCoroutine(ResetWait(settings.resetWait)); }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    void FixedUpdate(){
+        if (waitingToReset) { return; }
+
+        float distanceToTravel = Velocity.magnitude * Time.fixedDeltaTime * 1.1f;
+
+        // Handle collisions that would occur if we travel along out current velocity vector
+        var distanceChecked = 0.0f;
+        var hitNoisePlayed = false;
+
+        while (distanceChecked < distanceToTravel){
+            var rayDistance = distanceToTravel - distanceChecked;
+            Vector3 rayDirection = Velocity.normalized;
+            if (Physics.Raycast(transform.position, rayDirection, out var hit, rayDistance, collisionLayers, QueryTriggerInteraction.Collide))
+            {
+                // Handle collisions
+                // Debug.Log($"Ball raycast collision detected with {hit.collider.name} ({hit.collider.tag})");
+
+                if (hit.collider.gameObject.CompareTag("PlayerPaddle") || hit.collider.gameObject.CompareTag("OpponentPaddle"))
+                {
+                    PaddleCollision(hit.collider.transform,hit.normal);
+                    // Play a noise if the game isn't over and we haven't already done so
+                    if (!gameOver && !hitNoisePlayed) {
+                        audioSource.PlayOneShot(bounceClip);
+                        hitNoisePlayed = true;
+                    }
+                } else if (hit.collider.gameObject.CompareTag("BarrierHorizontal") || hit.collider.gameObject.CompareTag("BarrierVertical"))
+                {
+                    WallCollision(hit.normal);
+                    // Play a noise if the game isn't over and we haven't already done so
+                    if (!gameOver && !hitNoisePlayed) {
+                        audioSource.PlayOneShot(bounceClip);
+                        hitNoisePlayed = true;
+                    }
+                } else if (hit.collider.isTrigger){
+                    TriggerCollision(hit.collider);
+                }
+
+                distanceChecked += hit.distance;
+            } else
+            {
+                distanceChecked += rayDistance;
+            }
+        }
+
+        transform.position += Velocity * Time.fixedDeltaTime;
+    }
+
+    private void WallCollision(Vector3 collisionNormal){
+        Velocity = Vector3.Reflect(Velocity, collisionNormal);
+    }
+
+    private void PaddleCollision(Transform collisionTransform, Vector3 collisionNormal)
     {
-        // Debug.Log("Ball collision!");
-        // average normal in case multiple surfaces hit simultaneously
-        Vector3 collisionNormal = Vector3.zero;
-        for (int i = 0; i < collision.contactCount; i++)
-        {
-            collisionNormal += collision.GetContact(i).normal;
-        }
-        collisionNormal /= collision.contactCount;
+        // Ignore paddle collisions with the top or bottom of a paddle
+        if (Mathf.Abs(collisionNormal.y) > 0.5) { return; }
 
-        var newVelocity = Vector3.Reflect(Velocity, collisionNormal);
+        // For paddle collisions, the angle of reflection increases the further from the centre
+        // of the paddle the impact is. We increase the angle when the impact is high on the
+        // paddle, and decrease it when it's low.
 
-        // We ignore paddle collisions if the axis of the collision (collision normal) has a
-        // significant vertical component (i.e. the ball hit the top or bottom of a paddle).
-        if (collision.gameObject.CompareTag("PlayerPaddle") || collision.gameObject.CompareTag("OpponentPaddle"))
-        {
-            if (Mathf.Abs(collisionNormal.y) > 0.5) { return; }
+        /* The base cases are as follows:
+        1. The ball hits the centre of the paddle (collision transform [paddle] y position is
+        the same as the position of the ball) - the angle of reflection is unchanged, we
+        should just use the pure reflection velocity calculated above.
+        2. The ball hits the very top of the paddle (transform of the ball is the same as the
+        collision transform [paddle] position plus half the paddle height) - the reflection
+        is angled up by 45 degrees.
+        3. Opposite of 2 but at the bottom of the paddle the reflection is angled down.
+        Between the base cases the angle adjustment scales linearly. */
 
-            // For paddle collisions, the angle of reflection increases the further from the centre
-            // of the paddle the impact is. We increase the angle when the impact is high on the
-            // paddle, and decrease it when it's low.
+        /* Calculate the incident angle of the ball impact. If travelling to the right (v.x > 0)
+        then calculate from the right axis around the back vector. This will get us things in
+        the typical reference frame of the angle of incidence i.e. the angles will be in the
+        range -90 to 90, where negative angles indicate the ball is moving up into the paddle.
 
-            /* The base cases are as follows:
-            1. The ball hits the centre of the paddle (collision transform [paddle] y position is
-            the same as the position of the ball) - the angle of reflection is unchanged, we
-            should just use the pure reflection velocity calculated above.
-            2. The ball hits the very top of the paddle (transform of the ball is the same as the
-            collision transform [paddle] position plus half the paddle height) - the reflection
-            is angled up by 45 degrees.
-            3. Opposite of 2 but at the bottom of the paddle the reflection is angled down.
-            Between the base cases the angle adjustment scales linearly. */
+        Because we use the opposite x direction to measure from (left) and axis to measure
+        around (forward) when considering impacts where the ball is moving to the left, this
+        effectively flips everything around, so we can  
 
-            /* Calculate the incident angle of the ball impact. If travelling to the right (v.x > 0)
-            then calculate from the right axis around the back vector. This will get us things in
-            the typical reference frame of the angle of incidence i.e. the angles will be in the
-            range -90 to 90, where negative angles indicate the ball is moving up into the paddle.
+        When calculating the new angle, we make the same assumption about the vector from which
+        we measure the angle (e.g. Vector3.right if the ball was moving right) to ensure that
+        all impacts behave correctly regardless of moving right / left. But by making the
+        opposite assumption about the axis around which we measure the rotation (forward if the
+        ball was moving right and is now moving left), we can leave the sign of the the angle
+        the same.
 
-            Because we use the opposite x direction to measure from (left) and axis to measure
-            around (forward) when considering impacts where the ball is moving to the left, this
-            effectively flips everything around, so we can  
+        For example, this diagram shows the ball impacting moving left to right (v.x > 0) and
+        top to bottom. The angle of incidence is positive, the angle of reflection is also
+        positive and because we impact in the center of the paddle it is the same magnitude as
+        the angle of incidence.
+                            *-_
+                                *-_          |
+                                 ↑ *-_       |
+          Angle of incidence ->  |    *-_    |
+                                 |       *-_ | 
+          -> Vector3.right -> -> -> -> ->   #|
+                                 |       _-* | 
+          Angle of reflection -> |    _-*    |
+                                 ↓ _-*       |
+                                _-*          |
+                            _-*
+        */
 
-            When calculating the new angle, we make the same assumption about the vector from which
-            we measure the angle (e.g. Vector3.right if the ball was moving right) to ensure that
-            all impacts behave correctly regardless of moving right / left. But by making the
-            opposite assumption about the axis around which we measure the rotation (forward if the
-            ball was moving right and is now moving left), we can leave the sign of the the angle
-            the same.
+        // between the  relative to the  for both cases so we can simplify the rest of the
+        // maths. When we create the new velocity we reverse this reference frame simplification.
+        var incidentAngle = Vector3.SignedAngle(Mathf.Sign(Velocity.x) * Vector3.right, Velocity, Mathf.Sign(Velocity.x) * Vector3.back);
+        // Debug.Log($"incidentAngle: {incidentAngle}");
 
-            For example, this diagram shows the ball impacting moving left to right (v.x > 0) and
-            top to bottom. The angle of incidence is positive, the angle of reflection is also
-            positive and because we impact in the center of the paddle it is the same magnitude as
-            the angle of incidence.
-                               *-_
-                                  *-_          |
-                                   ↑ *-_       |
-            Angle of incidence ->  |    *-_    |
-                                   |       *-_ | 
-            -> Vector3.right -> -> -> -> ->   #|
-                                   |       _-* | 
-            Angle of reflection -> |    _-*    |
-                                   ↓ _-*       |
-                                  _-*          |
-                               _-*
-            */
+        // First set the new angle based on pure reflection
+        // var newAngle = 180 - incidentAngle;
+        var newAngle = incidentAngle;
+        // Debug.Log($"newAngle (after reflection): {newAngle}");
 
-            // between the  relative to the  for both cases so we can simplify the rest of the
-            // maths. When we create the new velocity we reverse this reference frame simplification.
-            var incidentAngle = Vector3.SignedAngle(Mathf.Sign(Velocity.x) * Vector3.right, Velocity, Mathf.Sign(Velocity.x) * Vector3.back);
-            // Debug.Log($"incidentAngle: {incidentAngle}");
+        // We measure relative transform positions as impact height ratio (IHR) where IHR = 1
+        // indicates the ball colliding with the top of the paddle, IHR = 0 the centre, and
+        // IHR = -1 the bottom.
+        var impactHeightRatio = Mathf.Clamp((transform.position.y - collisionTransform.transform.position.y) / (settings.paddleHeight * 0.5f),-1,1);
+        // Debug.Log($"impactHeightRatio: {impactHeightRatio}");
 
-            // First set the new angle based on pure reflection
-            // var newAngle = 180 - incidentAngle;
-            var newAngle = incidentAngle;
-            // Debug.Log($"newAngle (after reflection): {newAngle}");
+        // Change in angle is proportional to IHR. Negative proportion of change to impact
+        // height in order to fit the rest of the maths
+        var angleChange = impactHeightRatio * -settings.maximumBallAngleChange; // TODO: move to a setting
+        // Debug.Log($"angleChange: {angleChange}");
 
-            // We measure relative transform positions as impact height ratio (IHR) where IHR = 1
-            // indicates the ball colliding with the top of the paddle, IHR = 0 the centre, and
-            // IHR = -1 the bottom.
-            var impactHeightRatio = Mathf.Clamp((transform.position.y - collision.transform.position.y) / (settings.paddleHeight * 0.5f),-1,1);
-            // Debug.Log($"impactHeightRatio: {impactHeightRatio}");
+        // Limit the angle change so that the resulting velocity vector is less than
+        // maximumBallAngle from the relevant x axis (use right if travelling right [v.x > 0])
+        newAngle += angleChange;
+        // Debug.Log($"newAngle (after angle change, unclamped): {newAngle}");
+        newAngle = Mathf.Clamp(newAngle, -settings.maximumBallAngle, settings.maximumBallAngle);
+        // Debug.Log($"newAngle (final): {newAngle}");
 
-            // Change in angle is proportional to IHR. Negative proportion of change to impact
-            // height in order to fit the rest of the maths
-            var angleChange = impactHeightRatio * -settings.maximumBallAngleChange; // TODO: move to a setting
-            // Debug.Log($"angleChange: {angleChange}");
-
-            // Limit the angle change so that the resulting velocity vector is less than
-            // maximumBallAngle from the relevant x axis (use right if travelling right [v.x > 0])
-            newAngle += angleChange;
-            // Debug.Log($"newAngle (after angle change, unclamped): {newAngle}");
-            newAngle = Mathf.Clamp(newAngle, -settings.maximumBallAngle, settings.maximumBallAngle);
-            // Debug.Log($"newAngle (final): {newAngle}");
-
-            // Calculate new velocity, reversing the reference frame simplification
-            // and increasing the ball speed a little
-            newVelocity =
-                Quaternion.Euler(new Vector3(0,0,Mathf.Sign(Velocity.x) * newAngle)) *
-                (
-                    newVelocity.magnitude *
-                    (1 + settings.ballSpeedIncreaseOnPaddleHit) *
-                    - Mathf.Sign(Velocity.x)
-                    * Vector3.right
-                );
-
-        }
+        // Calculate new velocity, reversing the reference frame simplification
+        // and increasing the ball speed a little
+        var newVelocity =
+            Quaternion.Euler(new Vector3(0,0,Mathf.Sign(Velocity.x) * newAngle)) *
+            (
+                Velocity.magnitude * (1 + settings.ballSpeedIncreaseOnPaddleHit) *
+                - Mathf.Sign(Velocity.x)
+                * Vector3.right
+            );
 
         // Limit the speed
         if (newVelocity.magnitude > settings.maximumBallSpeed) { 
@@ -188,12 +218,9 @@ public class PongBall : MonoBehaviour
 
         // Apply the calculated velocity
         Velocity = newVelocity;
-
-        // Play a noise if the game isn't over
-        if (!gameOver) { audioSource.PlayOneShot(bounceClip); }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void TriggerCollision(Collider other)
     {
         // Debug.Log("Ball Trigger!");
         if (other.gameObject.CompareTag("PlayerGoal"))
@@ -212,5 +239,4 @@ public class PongBall : MonoBehaviour
             ResetBall(false);
         }
     }
-
 }
