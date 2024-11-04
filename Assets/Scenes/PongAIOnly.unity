@@ -655,7 +655,7 @@ MonoBehaviour:
   - {fileID: 450033769}
   colliders:
   - {fileID: 1398238306}
-  - {fileID: 0}
+  - {fileID: 613058004}
   settings: {fileID: 11400000, guid: 32e43cbd49924d84c9723bdb849af1d9, type: 2}
 --- !u!1 &586123054
 GameObject:
@@ -809,7 +809,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -872,8 +872,6 @@ GameObject:
   - component: {fileID: 875917286}
   - component: {fileID: 875917289}
   - component: {fileID: 875917288}
-  - component: {fileID: 875917294}
-  - component: {fileID: 875917293}
   - component: {fileID: 875917290}
   - component: {fileID: 875917292}
   m_Layer: 6
@@ -1091,54 +1089,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!65 &875917293
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 875917285}
-  m_Material: {fileID: 13400000, guid: 8150f1418fac8ce4ebbcc5a8c91eeb16, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 64
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &875917294
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 875917285}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 2
-  m_Constraints: 120
-  m_CollisionDetection: 0
 --- !u!1 &956439575
 GameObject:
   m_ObjectHideFlags: 0
@@ -1316,7 +1266,7 @@ MonoBehaviour:
   - {fileID: 1297649054}
   colliders:
   - {fileID: 45740125}
-  - {fileID: 0}
+  - {fileID: 1295834286}
   settings: {fileID: 11400000, guid: 32e43cbd49924d84c9723bdb849af1d9, type: 2}
 --- !u!1 &1295834284
 GameObject:
@@ -1365,7 +1315,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -1706,7 +1656,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1038640334}
         m_TargetAssemblyTypeName: PongPaddle, Assembly-CSharp
         m_MethodName: OnGameOverStateUpdated
         m_Mode: 0
@@ -2249,6 +2199,50 @@ PrefabInstance:
     - target: {fileID: 6927518290024016959, guid: d4bc63dae05e9794aafbc0238fd7a92b, type: 3}
       propertyPath: m_AnchorMin.x
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7300337385877449986, guid: d4bc63dae05e9794aafbc0238fd7a92b, type: 3}
+      propertyPath: timeScaleUpdated.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7300337385877449986, guid: d4bc63dae05e9794aafbc0238fd7a92b, type: 3}
+      propertyPath: timeScaleUpdated.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 875917290}
+    - target: {fileID: 7300337385877449986, guid: d4bc63dae05e9794aafbc0238fd7a92b, type: 3}
+      propertyPath: timeScaleUpdated.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 1549743772}
+    - target: {fileID: 7300337385877449986, guid: d4bc63dae05e9794aafbc0238fd7a92b, type: 3}
+      propertyPath: timeScaleUpdated.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7300337385877449986, guid: d4bc63dae05e9794aafbc0238fd7a92b, type: 3}
+      propertyPath: timeScaleUpdated.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7300337385877449986, guid: d4bc63dae05e9794aafbc0238fd7a92b, type: 3}
+      propertyPath: timeScaleUpdated.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnTimeScaleUpdated
+      objectReference: {fileID: 0}
+    - target: {fileID: 7300337385877449986, guid: d4bc63dae05e9794aafbc0238fd7a92b, type: 3}
+      propertyPath: timeScaleUpdated.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: OnTimeScaleUpdated
+      objectReference: {fileID: 0}
+    - target: {fileID: 7300337385877449986, guid: d4bc63dae05e9794aafbc0238fd7a92b, type: 3}
+      propertyPath: timeScaleUpdated.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: PongBall, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7300337385877449986, guid: d4bc63dae05e9794aafbc0238fd7a92b, type: 3}
+      propertyPath: timeScaleUpdated.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: PongGameController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7300337385877449986, guid: d4bc63dae05e9794aafbc0238fd7a92b, type: 3}
+      propertyPath: timeScaleUpdated.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 7300337385877449986, guid: d4bc63dae05e9794aafbc0238fd7a92b, type: 3}
+      propertyPath: timeScaleUpdated.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

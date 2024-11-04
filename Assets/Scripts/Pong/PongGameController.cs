@@ -62,12 +62,16 @@ public class PongGameController : MonoBehaviour
         }
     }
 
+    void ScoreNoise(){
+        if (audioSource.enabled) { audioSource.PlayOneShot(goalScoredClip); }
+    }
+
     // Called by the ball when entering the player goal
     public void PlayerScored()
     {
         PlayerScore++;
         playerScoreUpdated.Invoke(PlayerScore);
-        audioSource.PlayOneShot(goalScoredClip);
+        ScoreNoise();
         // Debug.Log($"Player Score: {PlayerScore}");
         CheckEndgame();
     }
@@ -77,8 +81,12 @@ public class PongGameController : MonoBehaviour
     {
         OpponentScore++;
         opponentScoredUpdated.Invoke(OpponentScore);
-        audioSource.PlayOneShot(goalScoredClip);
+        ScoreNoise();
         // Debug.Log($"Opponent Score: {OpponentScore}");
         CheckEndgame();
+    }
+
+    public void OnTimeScaleUpdated(float timeScale) {
+        audioSource.enabled = timeScale < 2.0f;
     }
 }

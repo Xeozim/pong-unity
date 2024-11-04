@@ -70,17 +70,21 @@ public class PongBall : MonoBehaviour
         if (!skipWait) { StartCoroutine(ResetWait(settings.resetWait)); }
     }
 
+    void BounceNoise(){
+        if (audioSource.enabled) { audioSource.PlayOneShot(bounceClip); }
+    }
+
     void FixedUpdate(){
         if (waitingToReset) { return; }
 
-        float distanceToTravel = Velocity.magnitude * Time.fixedDeltaTime * 1.1f;
+        float collisionCheckDistance = Velocity.magnitude * Time.fixedDeltaTime * 1.5f;
 
         // Handle collisions that would occur if we travel along out current velocity vector
         var distanceChecked = 0.0f;
         var hitNoisePlayed = false;
 
-        while (distanceChecked < distanceToTravel){
-            var rayDistance = distanceToTravel - distanceChecked;
+        while (distanceChecked < collisionCheckDistance){
+            var rayDistance = collisionCheckDistance - distanceChecked;
             Vector3 rayDirection = Velocity.normalized;
             if (Physics.Raycast(transform.position, rayDirection, out var hit, rayDistance, collisionLayers, QueryTriggerInteraction.Collide))
             {
@@ -92,7 +96,7 @@ public class PongBall : MonoBehaviour
                     PaddleCollision(hit.collider.transform,hit.normal);
                     // Play a noise if the game isn't over and we haven't already done so
                     if (!gameOver && !hitNoisePlayed) {
-                        audioSource.PlayOneShot(bounceClip);
+                        BounceNoise();
                         hitNoisePlayed = true;
                     }
                 } else if (hit.collider.gameObject.CompareTag("BarrierHorizontal") || hit.collider.gameObject.CompareTag("BarrierVertical"))
@@ -100,7 +104,7 @@ public class PongBall : MonoBehaviour
                     WallCollision(hit.normal);
                     // Play a noise if the game isn't over and we haven't already done so
                     if (!gameOver && !hitNoisePlayed) {
-                        audioSource.PlayOneShot(bounceClip);
+                        BounceNoise();
                         hitNoisePlayed = true;
                     }
                 } else if (hit.collider.isTrigger){
@@ -238,5 +242,9 @@ public class PongBall : MonoBehaviour
             ballEnteredOpponentGoal.Invoke();
             ResetBall(false);
         }
+    }
+
+    public void OnTimeScaleUpdated(float timeScale) {
+        audioSource.enabled = timeScale < 2.0f;
     }
 }
