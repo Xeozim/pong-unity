@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad8a515c2281dac4b99d3a61524102e7, type: 3}
+  m_Name: BreakoutSettings
+  m_EditorClassIdentifier: 
+  ballSpeedStage1: 3
+  ballSpeedStage2: 5
+  ballSpeedStage3: 7
+  ballSpeedStage4: 10
+  maximumBallAngle: 60
+  maximumBallAngleChange: 120
+  paddleWidth: 1
+  paddleHeight: 0.1
+  paddleSpeed: 5
+  xMinimum: -9.7
+  xMaxmium: 9.7
+  resetWait: 0
