@@ -20,7 +20,7 @@ MonoBehaviour:
   maximumBallAngleChange: 120
   paddleWidth: 1
   paddleHeight: 0.1
-  paddleSpeed: 5
+  paddleSpeed: 10
   xMinimum: -9.7
   xMaxmium: 9.7
   resetWait: 0
