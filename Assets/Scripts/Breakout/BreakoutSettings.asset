@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad8a515c2281dac4b99d3a61524102e7, type: 3}
   m_Name: BreakoutSettings
   m_EditorClassIdentifier: 
-  ballSpeedStage1: 3
-  ballSpeedStage2: 5
-  ballSpeedStage3: 7
-  ballSpeedStage4: 10
+  ballSpeedStage1: 5
+  ballSpeedStage2: 8
+  ballSpeedStage3: 12
+  ballSpeedStage4: 15
   maximumBallAngle: 60
   maximumBallAngleChange: 120
   paddleWidth: 1
