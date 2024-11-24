@@ -117,6 +117,23 @@ public class BreakoutBall : MonoBehaviour
         // Debug.Log($"Velocity (out): {Velocity}");
     }
 
+    // Apply angular limitation to the velocity to be within the angular limit
+    // relative to the normal vector of the paddle
+    void VelocityAngleLimit(Vector3 paddleNormal)
+    {
+        float dotProduct = Vector3.Dot(Velocity.normalized, paddleNormal.normalized);
+        float angle = Mathf.Acos(dotProduct) * Mathf.Rad2Deg;
+
+        if (angle > settings.maximumBallAngle)
+        {
+            Debug.Log($"Ball velocity angle ({angle}) greater than limit {settings.maximumBallAngle}");
+            Vector3 rotationAxis = Vector3.Cross(Velocity, paddleNormal);
+            float rotationAngle = angle - settings.maximumBallAngle;
+            Quaternion rotation = Quaternion.AngleAxis(rotationAngle, rotationAxis);
+            Velocity = rotation * Velocity;
+        }
+    }
+
     private void PaddleCollision(Transform collisionTransform, Vector3 collisionNormal)
     {
         Debug.Log($"=====================");
@@ -170,6 +187,10 @@ public class BreakoutBall : MonoBehaviour
 
         // Apply the calculated velocity
         Velocity = newVelocity;
+        Debug.Log($"Velocity (pre-angle-limit): {Velocity}");
+
+        VelocityAngleLimit(paddleNormal: collisionNormal);
+
         Debug.Log($"Velocity (out): {Velocity}");
     }
 
