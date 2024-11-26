@@ -1,73 +1,23 @@
-using System.Collections;
 using UnityEngine;
-using UnityEngine.Events;
 
-public class BreakoutBall : MonoBehaviour
+public class TestBall : MonoBehaviour
 {
-    [SerializeField] private BreakoutSettings settings;
     [SerializeField] private LayerMask collisionLayers;
-
-    private AudioSource audioSource;
-    [SerializeField] private AudioClip bounceClip;
+    [SerializeField] private float maximumBallAngle = 60.0f;
+    [SerializeField] private float ballSpeed = 8.0f;
 
     public Vector3 Velocity {get; private set;}
 
-    new private MeshRenderer renderer;
-    private bool waitingToReset = false;
-
-    private void Awake()
-    {
-        audioSource = GetComponent<AudioSource>();
-        renderer = GetComponent<MeshRenderer>();
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        ResetBall(true, true);
-    }
-
-    // Coroutine that disables the GameObject, waits for a period, and then re-enables it
-    private IEnumerator ResetWait(float seconds)
-    {
-        // Disable the GameObject visuals and set the wait flag
-        renderer.enabled = false;
-        waitingToReset = true;
-
-        // Wait for the specified duration
-        yield return new WaitForSeconds(seconds);
-
-        // Re-enable
-        renderer.enabled = true;
-        waitingToReset = false;
-    }
-
-    public void ResetBall(bool playerLost, bool skipWait = false)
-    {
-        // Initialise in a random position on the x axis
-        var xInitial = Random.Range(settings.xMinimum + transform.localScale.y, settings.xMaxmium - transform.localScale.x);
-        transform.position = new Vector3(xInitial,0,0);
-
-        // Initialise moving at 60 degrees either up or down
-        // Assumes the player is on the left and fires towards the player that lost the last point
-        var velRotation = Quaternion.Euler(0, 0, settings.maximumBallAngle * Mathf.Sign(Random.value - 0.5f));
-        Velocity = velRotation * new Vector3((playerLost ? -1 : 1) * settings.ballSpeedStage1,0);
-
-        if (!skipWait) { StartCoroutine(ResetWait(settings.resetWait)); }
-    }
-
-    void BounceNoise(){
-        if (audioSource.enabled) { audioSource.PlayOneShot(bounceClip); }
+    void Start(){
+        var velRotation = Quaternion.Euler(0, 0, maximumBallAngle * Mathf.Sign(Random.value - 0.5f));
+        Velocity = velRotation * new Vector3(ballSpeed,0);
     }
 
     void FixedUpdate(){
-        if (waitingToReset) { return; }
-
         float collisionCheckDistance = Velocity.magnitude * Time.fixedDeltaTime * 1.5f;
 
         // Handle collisions that would occur if we travel along out current velocity vector
         var distanceChecked = 0.0f;
-        var hitNoisePlayed = false;
 
         while (distanceChecked < collisionCheckDistance){
             var rayDistance = collisionCheckDistance - distanceChecked;
@@ -77,22 +27,12 @@ public class BreakoutBall : MonoBehaviour
                 // Handle collisions
                 // Debug.Log($"Ball raycast collision detected with {hit.collider.name} ({hit.collider.tag})");
 
-                if (hit.collider.gameObject.CompareTag("PlayerPaddle"))
+                if (hit.collider.gameObject.CompareTag("PlayerPaddle") || hit.collider.gameObject.CompareTag("OpponentPaddle"))
                 {
                     PaddleCollision(hit.point, hit.transform);
-                    // Play a noise if the game isn't over and we haven't already done so
-                    if (!hitNoisePlayed) {
-                        BounceNoise();
-                        hitNoisePlayed = true;
-                    }
                 } else if (hit.collider.gameObject.CompareTag("BarrierHorizontal") || hit.collider.gameObject.CompareTag("BarrierVertical"))
                 {
                     WallCollision(hit.normal);
-                    // Play a noise if the game isn't over and we haven't already done so
-                    if (!hitNoisePlayed) {
-                        BounceNoise();
-                        hitNoisePlayed = true;
-                    }
                 } else if (hit.collider.isTrigger){
                     TriggerCollision(hit.collider);
                 }
@@ -103,6 +43,9 @@ public class BreakoutBall : MonoBehaviour
                 distanceChecked += rayDistance;
             }
         }
+
+        // Set the speed
+        Velocity = Velocity.normalized * ballSpeed;
 
         transform.position += Velocity * Time.fixedDeltaTime;
     }
@@ -118,11 +61,11 @@ public class BreakoutBall : MonoBehaviour
         float dotProduct = Vector3.Dot(Velocity.normalized, paddleNormal.normalized);
         float angle = Mathf.Acos(dotProduct) * Mathf.Rad2Deg;
 
-        if (angle > settings.maximumBallAngle)
+        if (angle > maximumBallAngle)
         {
-            Debug.Log($"Ball velocity angle ({angle}) greater than limit {settings.maximumBallAngle}");
+            Debug.Log($"Ball velocity angle ({angle}) greater than limit {maximumBallAngle}");
             Vector3 rotationAxis = Vector3.Cross(Velocity, paddleNormal);
-            float rotationAngle = angle - settings.maximumBallAngle;
+            float rotationAngle = angle - maximumBallAngle;
             Quaternion rotation = Quaternion.AngleAxis(rotationAngle, rotationAxis);
             Velocity = rotation * Velocity;
         }
@@ -185,9 +128,5 @@ public class BreakoutBall : MonoBehaviour
 
     private void TriggerCollision(Collider other)
     {
-    }
-
-    public void OnTimeScaleUpdated(float timeScale) {
-        audioSource.enabled = timeScale < 2.0f;
     }
 }
