@@ -79,7 +79,7 @@ public class BreakoutBall : MonoBehaviour
 
                 if (hit.collider.gameObject.CompareTag("PlayerPaddle"))
                 {
-                    PaddleCollision(hit.collider.transform, hit.normal);
+                    PaddleCollision(hit.point, hit.transform, hit.normal);
                     // Play a noise if the game isn't over and we haven't already done so
                     if (!hitNoisePlayed) {
                         BounceNoise();
@@ -134,7 +134,7 @@ public class BreakoutBall : MonoBehaviour
         }
     }
 
-    private void PaddleCollision(Transform collisionTransform, Vector3 collisionNormal)
+    private void PaddleCollision(Vector3 collisionPosition, Transform paddle, Vector3 collisionNormal)
     {
         Debug.Log($"=====================");
         Debug.Log($"Ball paddle collision");
@@ -167,31 +167,72 @@ public class BreakoutBall : MonoBehaviour
          - Normal vector (0.707, 1)
          - Thus the ball bounces off to the right
         */ 
-        Debug.Log($"Velocity (in): {Velocity}");
+        // Debug.Log($"Velocity (in): {Velocity}");
+        Debug.Log($"collisionPosition: {collisionPosition}");
+        Debug.Log($"Paddle Position: {paddle.position}");
+        Debug.Log($"collisionNormal: {collisionNormal}");
+
+        // Project the collision position onto the plane defined by the paddle
+        // orientation, and get the length of the projected vector.
+        var vectorToContact = collisionPosition - paddle.position;
+        Debug.Log($"vectorToContact: {vectorToContact}");
+        var projectedPoint = Vector3.ProjectOnPlane(vectorToContact, paddle.up);
+        Debug.Log($"projectedPoint: {projectedPoint}");
+        // var centerToProjected = projectedPoint - planeCenter;
+        // Debug.Log($"centerToProjected: {centerToProjected}");
+        var projectedDistance = projectedPoint.magnitude; 
+        Debug.Log($"projectedDistance: {projectedDistance}");
+
+        // If the vector from the paddle centre to the collision points to the
+        // right, the collision is on the right of the paddle and the dot
+        // product result will be > 0. If it isn't we want to negate the distance
+        Debug.Log($"paddle.right: {paddle.right}");
+        if (Vector3.Dot(vectorToContact, paddle.right) < 0)
+        {
+            projectedDistance = -projectedDistance;
+        }
+        Debug.Log($"Distance after x axis correction: {projectedDistance}");
+        // If the collision normal points in the same direction as the paddle's
+        // up vector, then the dot product will be > 0. If it isn't we want to
+        // negate the distance.
+        if (Vector3.Dot(paddle.up,collisionNormal) < 0)
+        {
+            projectedDistance = -projectedDistance;
+        }
+        Debug.Log($"Distance after rotation correction: {projectedDistance}");
 
         // We measure relative transform positions as impact offset ratio (IOR)
         // where IOR = 1 indicates the ball colliding with the extremity of the
         // paddle, IOR = 0 the centre, and IOR = -1 the opposite extremity.
-        var impactOffsetRatio = Mathf.Clamp((transform.position.x - collisionTransform.transform.position.x) / (settings.paddleWidth * 0.5f),-1,1);
-        Debug.Log($"impactOffsetRatio: {impactOffsetRatio}");
+
+        // var impactOffsetRatio = Mathf.Clamp((transform.position.x - collisionPosition.x) / (settings.paddleWidth * 0.5f),-1,1);
+        // Debug.Log($"impactOffsetRatio: {impactOffsetRatio}");
 
         // Now we can calculate the collision normal to use based on the IOR
-        var fakeNormal = new Vector3(Mathf.Sin(0.25f*Mathf.PI*impactOffsetRatio),1,0);
+        var fakeNormalLocal = new Vector3(Mathf.Sin(0.25f*Mathf.PI*projectedDistance),1,0);
         // var fakeNormal = new Vector3(Mathf.Sin(impactOffsetRatio),1,0);
-        fakeNormal.Normalize();
-        Debug.Log($"fakeNormal: {fakeNormal}");
+        fakeNormalLocal.Normalize();
+        // Debug.Log($"fakeNormal: {fakeNormal}");
 
-        var newVelocity = Vector3.Reflect(Velocity,fakeNormal);
+        // Fake normal is calculated as if the global up axis is the default,
+        // but what we should be doing is calculating it relative to the paddle
+        // orientation. To do this we calculate the rotation quaternion that 
+        // transforms from world space to paddle space, then apply that
+        // transformation to the normal.
+        var rotation = Quaternion.FromToRotation(Vector3.up, paddle.up);
+        var fakeNormalWorld = rotation * fakeNormalLocal;
+
+        var newVelocity = Vector3.Reflect(Velocity,fakeNormalWorld);
 
         // Limit angle to within the settings limit around the 
 
         // Apply the calculated velocity
         Velocity = newVelocity;
-        Debug.Log($"Velocity (pre-angle-limit): {Velocity}");
+        // Debug.Log($"Velocity (pre-angle-limit): {Velocity}");
 
-        VelocityAngleLimit(paddleNormal: collisionNormal);
+        VelocityAngleLimit(paddleNormal: paddle.up);
 
-        Debug.Log($"Velocity (out): {Velocity}");
+        // Debug.Log($"Velocity (out): {Velocity}");
     }
 
     private void TriggerCollision(Collider other)
