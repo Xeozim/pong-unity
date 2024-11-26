@@ -78,4 +78,14 @@ public static class BallBehaviours
         return Vector3.Reflect(velocityIn,fakeNormalWorld);;
     }
 
+    // Limit a velocity vector using an absolute speed limit
+    public static Vector3 VelocityAfterSpeedLimit(Vector3 velocityIn, float speedLimit)
+    {
+        if (velocityIn.magnitude > speedLimit) { 
+            return velocityIn.normalized * speedLimit;
+        } else
+        {
+            return velocityIn;
+        }
+    }
 }

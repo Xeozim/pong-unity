@@ -14,6 +14,7 @@ public class BreakoutBall : MonoBehaviour
 
     new private MeshRenderer renderer;
     private bool waitingToReset = false;
+    private bool hitNoisePlayed = false;
 
     private void Awake()
     {
@@ -25,6 +26,10 @@ public class BreakoutBall : MonoBehaviour
     void Start()
     {
         ResetBall(true, true);
+    }
+
+    void Update(){
+        hitNoisePlayed = false;
     }
 
     // Coroutine that disables the GameObject, waits for a period, and then re-enables it
@@ -56,8 +61,13 @@ public class BreakoutBall : MonoBehaviour
         if (!skipWait) { StartCoroutine(ResetWait(settings.resetWait)); }
     }
 
+    // Play a noise if the game isn't over and we haven't already done so since the last update
     void BounceNoise(){
-        if (audioSource.enabled) { audioSource.PlayOneShot(bounceClip); }
+        if (audioSource.enabled && !hitNoisePlayed)
+        {
+            audioSource.PlayOneShot(bounceClip);
+            hitNoisePlayed = true;
+        }
     }
 
     void FixedUpdate(){
@@ -66,7 +76,6 @@ public class BreakoutBall : MonoBehaviour
         // Handle collisions with a raycast check
         float collisionCheckDistance = Velocity.magnitude * Time.fixedDeltaTime * 1.5f;
         var distanceChecked = 0.0f;
-        var hitNoisePlayed = false;
 
         while (distanceChecked < collisionCheckDistance){
             var rayDistance = collisionCheckDistance - distanceChecked;
@@ -78,18 +87,11 @@ public class BreakoutBall : MonoBehaviour
                 {
                     Velocity = BallBehaviours.VelocityAfterPaddleCollision(Velocity, hit.point, hit.transform);
                     Velocity = BallBehaviours.ApplyAngleLimitToVector(Velocity, settings.maximumBallAngle, hit.transform.up);
-                    if (!hitNoisePlayed) {
-                        BounceNoise();
-                        hitNoisePlayed = true;
-                    }
+                    BounceNoise();
                 } else if (hit.collider.gameObject.CompareTag("BarrierHorizontal") || hit.collider.gameObject.CompareTag("BarrierVertical"))
                 {
                     Velocity = BallBehaviours.VelocityAfterWallCollision(Velocity, hit.normal);
-                    // Play a noise if the game isn't over and we haven't already done so
-                    if (!hitNoisePlayed) {
-                        BounceNoise();
-                        hitNoisePlayed = true;
-                    }
+                    BounceNoise();
                 }
                 distanceChecked += hit.distance;
             } else

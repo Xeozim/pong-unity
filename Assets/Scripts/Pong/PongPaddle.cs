@@ -19,7 +19,8 @@ public class PongPaddle : MonoBehaviour
     }
 
     protected void SettingsRefresh(){
-        paddle.transform.localScale = new Vector3(settings.paddleWidth,settings.paddleHeight,1);
+        // NB pong paddles are rotated 90 degrees so they can use the maths from BallBehaviours
+        paddle.transform.localScale = new Vector3(settings.paddleHeight,settings.paddleWidth,1);
     }
 
     public void OnGameOverStateUpdated(bool isGameOver)
