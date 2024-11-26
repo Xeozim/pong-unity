@@ -13,18 +13,6 @@ public class TestBall : MonoBehaviour
         Velocity = velRotation * new Vector3(ballSpeed,0);
     }
 
-    void OnCollisionRaycastHit(RaycastHit hit){
-        // Debug.Log($"Ball raycast collision detected with {hit.collider.name} ({hit.collider.tag})");
-        if (hit.collider.gameObject.CompareTag("PlayerPaddle") || hit.collider.gameObject.CompareTag("OpponentPaddle"))
-        {
-            Velocity = BallBehaviours.VelocityAfterPaddleCollision(Velocity, hit.point, hit.transform);
-            Velocity = BallBehaviours.ApplyAngleLimitToVector(Velocity, maximumBallAngle, hit.transform.up);
-        } else if (hit.collider.gameObject.CompareTag("BarrierHorizontal") || hit.collider.gameObject.CompareTag("BarrierVertical"))
-        {
-            Velocity = BallBehaviours.VelocityAfterWallCollision(Velocity, hit.normal);
-        }
-    }
-
     void FixedUpdate(){
         // Handle collisions with a raycast check
         float collisionCheckDistance = Velocity.magnitude * Time.fixedDeltaTime * 1.5f;
@@ -34,7 +22,15 @@ public class TestBall : MonoBehaviour
             var rayDirection = Velocity.normalized;
             if (Physics.Raycast(transform.position, rayDirection, out var hit, rayDistance, collisionLayers, QueryTriggerInteraction.Collide))
             {
-                OnCollisionRaycastHit(hit);
+                // Debug.Log($"Ball raycast collision detected with {hit.collider.name} ({hit.collider.tag})");
+                if (hit.collider.gameObject.CompareTag("PlayerPaddle") || hit.collider.gameObject.CompareTag("OpponentPaddle"))
+                {
+                    Velocity = BallBehaviours.VelocityAfterPaddleCollision(Velocity, hit.point, hit.transform);
+                    Velocity = BallBehaviours.ApplyAngleLimitToVector(Velocity, maximumBallAngle, hit.transform.up);
+                } else if (hit.collider.gameObject.CompareTag("BarrierHorizontal") || hit.collider.gameObject.CompareTag("BarrierVertical"))
+                {
+                    Velocity = BallBehaviours.VelocityAfterWallCollision(Velocity, hit.normal);
+                }
                 distanceChecked += hit.distance;
             } else
             {    

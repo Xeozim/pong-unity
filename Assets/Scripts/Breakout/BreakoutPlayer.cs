@@ -12,7 +12,6 @@ public class BreakoutPlayer : MonoBehaviour
     protected Vector3 targetPosition;
     private BreakoutControls controls;
     private float moveInput;
-    private float rotateInput;
 
     private void Awake(){
         controls = new BreakoutControls();
@@ -26,24 +25,12 @@ public class BreakoutPlayer : MonoBehaviour
         // Subscribe to the input actions
         controls.Player.Move.performed += OnMoveInputPerformed;
         controls.Player.Move.canceled += OnMoveInputCancelled;
-        controls.Player.Rotate.performed += OnRotateInputPerformed;
-        controls.Player.Rotate.canceled += OnRotateInputCancelled;
     }
 
     private void OnDisable()
     {
         // Disable input actions
         controls.Player.Disable();
-    }
-
-    // DEBUG
-    private void OnRotateInputPerformed(InputAction.CallbackContext context)
-    {
-        rotateInput = context.ReadValue<float>();
-    }
-    private void OnRotateInputCancelled(InputAction.CallbackContext context)
-    {
-        rotateInput = 0;
     }
 
     // Method for handling movement input from absolute sources e.g. we should always aim to match
@@ -122,8 +109,5 @@ public class BreakoutPlayer : MonoBehaviour
         // Update position, clamping to game limits
         var newXPosition = Mathf.Clamp(paddle.transform.position.x + velocity * Time.fixedDeltaTime, settings.xMinimum, settings.xMaxmium);
         paddle.transform.position = new Vector3(newXPosition, paddle.transform.position.y,paddle.transform.position.z);
-
-        // Rotation
-        paddle.transform.Rotate(Vector3.forward, rotateInput * 2);
     }
 }
