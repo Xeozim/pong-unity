@@ -9,9 +9,15 @@ public class UIController : MonoBehaviour
     [SerializeField] TextMeshProUGUI opponentScore;
 
     public void OnPlayerScoreUpdated(int score){
-        playerScore.text = $"{score}";
+        if (playerScore != null)
+        {
+            playerScore.text = $"{score}";
+        }
     }
     public void OnOpponentScoreUpdated(int score){
-        opponentScore.text = $"{score}";
+        if (opponentScore != null)
+        {
+            opponentScore.text = $"{score}";
+        }
     }
 }

@@ -10,7 +10,7 @@ public class BreakoutBall : Ball
     {
         // Initialise in a random position on the x axis
         var xInitial = Random.Range(settings.xMinimum + transform.localScale.y, settings.xMaxmium - transform.localScale.x);
-        transform.position = new Vector3(xInitial,0,0);
+        transform.position = new Vector3(xInitial,transform.position.y,transform.position.z);
 
         // Initialise moving at 60 degrees either up or down
         // Assumes the player is on the left and fires towards the player that lost the last point
@@ -22,6 +22,7 @@ public class BreakoutBall : Ball
 
     protected override void ColliderHit(RaycastHit hit)
     {
+        Debug.Log($"Ball hit {hit.collider.gameObject} with tag {hit.collider.gameObject.tag}");
         if (hit.collider.gameObject.CompareTag("PlayerPaddle") || hit.collider.gameObject.CompareTag("OpponentPaddle"))
         {
             Velocity = BallBehaviours.VelocityAfterPaddleCollision(Velocity, hit.point, hit.transform);
@@ -31,6 +32,11 @@ public class BreakoutBall : Ball
         {
             Velocity = BallBehaviours.VelocityAfterWallCollision(Velocity, hit.normal);
             PlayBounceNoise();
+        } else if (hit.collider.gameObject.CompareTag("DestructibleBlock"))
+        {
+            DestructibleScoringBlock block = hit.collider.gameObject.GetComponent<DestructibleScoringBlock>();
+            Velocity = BallBehaviours.VelocityAfterWallCollision(Velocity, hit.normal);
+            block?.Damage(1,gameObject);
         }
     }
 }

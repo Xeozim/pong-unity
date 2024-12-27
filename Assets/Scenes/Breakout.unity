@@ -194,7 +194,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 100487546}
-  - component: {fileID: 100487547}
   m_Layer: 0
   m_Name: Blocks
   m_TagString: Untagged
@@ -217,22 +216,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1430277216}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &100487547
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 100487545}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c78a59bec4930b647807a28f197cd56f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bounds:
-    m_Center: {x: 0, y: 0.75, z: 0}
-    m_Extent: {x: 9, y: 1.5, z: 0}
-  blockPrefab: {fileID: 83793602007049944, guid: db623a45e45393e40a86989e2832a800, type: 3}
 --- !u!1 &195350761
 GameObject:
   m_ObjectHideFlags: 0
@@ -1141,6 +1124,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1430277216}
+  - component: {fileID: 1430277217}
   m_Layer: 0
   m_Name: Gameplay
   m_TagString: Untagged
@@ -1167,6 +1151,42 @@ Transform:
   - {fileID: 100487546}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1430277217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1430277215}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d88835560696fec408c4d0fc692ddcee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerScoreUpdated:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 833079943}
+        m_TargetAssemblyTypeName: UIController, Assembly-CSharp
+        m_MethodName: OnPlayerScoreUpdated
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  gameOverStateUpdated:
+    m_PersistentCalls:
+      m_Calls: []
+  settings: {fileID: 11400000, guid: f7a85022c509e734890042d5669ef160, type: 2}
+  blockBounds:
+    m_Center: {x: 0, y: 0.75, z: 0}
+    m_Extent: {x: 9, y: 1.5, z: 0}
+  blockParent: {fileID: 100487546}
+  blockPrefab: {fileID: 626347271616852500, guid: db623a45e45393e40a86989e2832a800, type: 3}
 --- !u!1 &1494848521
 GameObject:
   m_ObjectHideFlags: 0

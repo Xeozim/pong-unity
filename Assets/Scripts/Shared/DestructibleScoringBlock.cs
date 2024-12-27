@@ -8,14 +8,15 @@ public class DestructibleScoringBlock : MonoBehaviour
 {
     public UnityEvent<float, GameObject> scoringBlockDestroyed;
 
-    [SerializeField] private float Score = 1;
-    [SerializeField] private float Health = 1;
+    public float Score = 1;
+    public float Health = 1;
 
     public void Damage(float damage, GameObject damageDealer)
     {
         Health -= damage;
-        if (Health < 0) {
+        if (Health <= 0) {
             scoringBlockDestroyed.Invoke(Score, damageDealer);
+            Destroy(gameObject);
         }
     }
 }
