@@ -80,10 +80,13 @@ public static class BallBehaviours
     }
 
     // Limit a velocity vector using an absolute speed limit
-    public static Vector3 VelocityAfterSpeedLimit(Vector3 velocityIn, float speedLimit)
+    public static Vector3 VelocityAfterSpeedLimit(Vector3 velocityIn, float speedLimit, float minimumSpeed = 0)
     {
-        if (velocityIn.magnitude > speedLimit) { 
+        var velMag = velocityIn.magnitude;
+        if (velMag > speedLimit) { 
             return velocityIn.normalized * speedLimit;
+        } else if (velMag < minimumSpeed) { 
+            return velocityIn.normalized * minimumSpeed;
         } else
         {
             return velocityIn;

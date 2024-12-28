@@ -9,6 +9,7 @@ public class BreakoutBall : Ball
 
     private float _speed;
     private Vector3 _defaultPosition;
+    private bool _blockCollisionsEnabled = true;
 
     protected override void BallAwake()
     {
@@ -18,8 +19,6 @@ public class BreakoutBall : Ball
 
     public void OnGameStageUpdated(GameStage stage)
     {
-        if(stage == GameStage.GameOver){ SetVisualEnabledState(false); }
-        if(stage == GameStage.StageOne){ ResetBall(); }
         _speed = stage switch
         {
             GameStage.GameOver => 0,
@@ -29,6 +28,19 @@ public class BreakoutBall : Ball
             GameStage.StageFour => _settings.ballSpeedStage4,
             _ => _settings.ballSpeedStage1,
         };
+        if(stage == GameStage.GameOver){
+            SetVisualEnabledState(false);
+            CancelReset();
+        }
+        if(stage == GameStage.StageOne){ ResetBall(); }
+    }
+
+    // Coroutine that disables collisions for a period
+    protected IEnumerator BlockCollisionWait(float seconds)
+    {   
+        _blockCollisionsEnabled = false;
+        yield return new WaitForSeconds(seconds);
+        _blockCollisionsEnabled = true;
     }
 
     public override void ResetBall(bool playerLost = true, bool skipWait = false)
@@ -59,11 +71,15 @@ public class BreakoutBall : Ball
             PlayBounceNoise();
         } else if (hit.collider.gameObject.CompareTag("DestructibleBlock"))
         {
+            if (!_blockCollisionsEnabled) { return; }
             DestructibleScoringBlock block = hit.collider.gameObject.GetComponent<DestructibleScoringBlock>();
             Velocity = BallBehaviours.VelocityAfterWallCollision(Velocity, hit.normal);
             PlayBounceNoise();
             if (block != null) { block.Damage(1, gameObject); }
+            // Disable collisions temporarily after hitting a block
+            StartCoroutine(BlockCollisionWait(_settings.blockCollisionWait));
         }
+        Velocity = BallBehaviours.VelocityAfterSpeedLimit(Velocity, _speed, _speed);
     }
 
     protected override void TriggerHit(RaycastHit hit)

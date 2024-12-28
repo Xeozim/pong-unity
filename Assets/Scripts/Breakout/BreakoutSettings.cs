@@ -19,4 +19,5 @@ public class BreakoutSettings : ScriptableObject
     public float xMinimum;
     public float xMaxmium;
     public float resetWait;
+    public float blockCollisionWait = 0.1f;
 }

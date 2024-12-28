@@ -61,6 +61,7 @@ public class BreakoutGameController : MonoBehaviour
 
     private void SetGameStage(GameStage stage)
     {
+        Debug.Log($"Game stage updated: {stage}");
         _gameStage = stage;
         GameStageUpdated.Invoke(stage);
     }
@@ -84,7 +85,7 @@ public class BreakoutGameController : MonoBehaviour
     // Called by a block when destroyed by the ball
     public void OnScoringBlockDestroyed(float blockValue, GameObject _)
     {
-        SetPlayerScore((int) blockValue);
+        SetPlayerScore(_playerScore + (int) blockValue);
 
         _blocksHit++;
 

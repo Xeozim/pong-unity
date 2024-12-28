@@ -88,9 +88,22 @@ public abstract class Ball : MonoBehaviour
         renderer.enabled = state;
     }
 
+    private bool _cancelReset = false;
+    protected void CancelReset()
+    {
+        _cancelReset = true;
+    }
+
     // Coroutine that disables the GameObject, waits for a period, and then re-enables it
     protected IEnumerator ResetWait(float seconds)
     {
+        // Check if the reset has been canceled
+        if (_cancelReset)
+        {
+            _cancelReset = false;
+            yield break;
+        }
+        
         // Disable the GameObject visuals and set the wait flag
         SetVisualEnabledState(false);
         waitingToReset = true;
