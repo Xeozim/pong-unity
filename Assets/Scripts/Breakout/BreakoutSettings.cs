@@ -7,6 +7,10 @@ public class BreakoutSettings : ScriptableObject
     public float ballSpeedStage2;
     public float ballSpeedStage3;
     public float ballSpeedStage4;
+    public int blockScoreBottomRows = 1;
+    public int blockScoreMiddleRows = 4;
+    public int blockScoreTopRows = 7;
+    public int playerLives = 3;
     public float maximumBallAngle;
     public float maximumBallAngleChange;
     public float paddleWidth;

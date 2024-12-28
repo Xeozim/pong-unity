@@ -16,11 +16,15 @@ MonoBehaviour:
   ballSpeedStage2: 8
   ballSpeedStage3: 12
   ballSpeedStage4: 15
+  blockScoreBottomRows: 1
+  blockScoreMiddleRows: 4
+  blockScoreTopRows: 7
+  playerLives: 3
   maximumBallAngle: 60
   maximumBallAngleChange: 120
-  paddleWidth: 2
+  paddleWidth: 1.5
   paddleHeight: 0.1
   paddleSpeed: 15
-  xMinimum: -8.5
-  xMaxmium: 8.5
-  resetWait: 0
+  xMinimum: -8.25
+  xMaxmium: 8.25
+  resetWait: 0.5

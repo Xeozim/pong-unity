@@ -64,8 +64,9 @@ public static class BallBehaviours
          - Tangent vector (1,-0.707)
          - Normal vector (0.707, 1)
          - Thus the ball bounces off to the right
-        */ 
-        var fakeNormalLocal = new Vector3(Mathf.Sin(0.5f*Mathf.PI*collisionDistance),1,0);
+        */
+        // Make the curve more extreme by reducing the y component
+        var fakeNormalLocal = new Vector3(Mathf.Sin(0.5f*Mathf.PI*collisionDistance),0.85f,0);
         fakeNormalLocal.Normalize();
 
         // The maths behind the fake normal generates a normal vector relative to the paddle, so

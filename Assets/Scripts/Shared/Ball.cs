@@ -83,18 +83,23 @@ public abstract class Ball : MonoBehaviour
         audioSource.enabled = timeScale < 2.0f;
     }
 
+    protected void SetVisualEnabledState(bool state)
+    {
+        renderer.enabled = state;
+    }
+
     // Coroutine that disables the GameObject, waits for a period, and then re-enables it
     protected IEnumerator ResetWait(float seconds)
     {
         // Disable the GameObject visuals and set the wait flag
-        renderer.enabled = false;
+        SetVisualEnabledState(false);
         waitingToReset = true;
 
         // Wait for the specified duration
         yield return new WaitForSeconds(seconds);
 
         // Re-enable
-        renderer.enabled = true;
+        SetVisualEnabledState(true);
         waitingToReset = false;
     }
 
