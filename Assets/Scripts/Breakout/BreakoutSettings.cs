@@ -12,12 +12,10 @@ public class BreakoutSettings : ScriptableObject
     public int blockScoreTopRows = 7;
     public int playerLives = 3;
     public float maximumBallAngle;
-    public float maximumBallAngleChange;
     public float paddleWidth;
     public float paddleHeight;
     public float paddleSpeed;
     public float xMinimum;
     public float xMaxmium;
     public float resetWait;
-    public float blockCollisionWait = 0.1f;
 }

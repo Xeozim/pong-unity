@@ -6,10 +6,11 @@ using UnityEngine.InputSystem;
 public enum GameStage
 {
     GameOver = 0,
-    StageOne = 1,
-    StageTwo = 2,
-    StageThree = 3,
-    StageFour = 4,
+    StageOne = 1, // Game start
+    StageTwo = 2, // 4 blocks destroyed
+    StageThree = 3, // 11 blocks destroyed
+    StageFour = 4, // Any block on the top 2 rows destroyed
+    StageFive = 5, // Ball hits the ceiling
 }
 
 public class BreakoutGameController : MonoBehaviour
@@ -64,6 +65,11 @@ public class BreakoutGameController : MonoBehaviour
         Debug.Log($"Game stage updated: {stage}");
         _gameStage = stage;
         GameStageUpdated.Invoke(stage);
+    }
+
+    public void OnCeilingHit()
+    {
+        SetGameStage(GameStage.StageFive);
     }
 
     private void SetPlayerScore(int score)

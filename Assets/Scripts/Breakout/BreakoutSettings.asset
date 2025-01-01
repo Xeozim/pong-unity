@@ -12,17 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad8a515c2281dac4b99d3a61524102e7, type: 3}
   m_Name: BreakoutSettings
   m_EditorClassIdentifier: 
-  ballSpeedStage1: 5
+  ballSpeedStage1: 6
   ballSpeedStage2: 7
-  ballSpeedStage3: 9
-  ballSpeedStage4: 11
+  ballSpeedStage3: 8
+  ballSpeedStage4: 9
   blockScoreBottomRows: 1
   blockScoreMiddleRows: 4
   blockScoreTopRows: 7
   playerLives: 3
   maximumBallAngle: 60
-  maximumBallAngleChange: 120
-  paddleWidth: 1.5
+  paddleWidth: 3
   paddleHeight: 0.1
   paddleSpeed: 15
   xMinimum: -8.25

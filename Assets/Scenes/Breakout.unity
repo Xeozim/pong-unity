@@ -722,6 +722,21 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  BallHitCeiling:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1430277217}
+        m_TargetAssemblyTypeName: BreakoutGameController, Assembly-CSharp
+        m_MethodName: OnCeilingHit
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!82 &875917291
 AudioSource:
   m_ObjectHideFlags: 0
@@ -990,12 +1005,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d961be2a03db55148957e15256bcda86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  paddle: {fileID: 1297649056}
-  renderers:
+  _paddle: {fileID: 1297649056}
+  _renderers:
   - {fileID: 1297649054}
-  colliders:
+  _colliders:
   - {fileID: 45740125}
-  settings: {fileID: 11400000, guid: f7a85022c509e734890042d5669ef160, type: 2}
+  - {fileID: 1904410699}
+  _settings: {fileID: 11400000, guid: f7a85022c509e734890042d5669ef160, type: 2}
 --- !u!1 &1297649052
 GameObject:
   m_ObjectHideFlags: 0

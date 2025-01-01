@@ -6,6 +6,7 @@ public class BreakoutBall : Ball
 {
     [SerializeField] private BreakoutSettings _settings;
     public UnityEvent BallEnteredPlayerGoal;
+    public UnityEvent BallHitCeiling;
 
     private float _speed;
     private Vector3 _defaultPosition;
@@ -35,24 +36,15 @@ public class BreakoutBall : Ball
         if(stage == GameStage.StageOne){ ResetBall(); }
     }
 
-    // Coroutine that disables collisions for a period
-    protected IEnumerator BlockCollisionWait(float seconds)
-    {   
-        _blockCollisionsEnabled = false;
-        yield return new WaitForSeconds(seconds);
-        _blockCollisionsEnabled = true;
-    }
-
     public override void ResetBall(bool playerLost = true, bool skipWait = false)
     {
         // Initialise in a random position on the x axis
         var xInitial = Random.Range(_settings.xMinimum + transform.localScale.y, _settings.xMaxmium - transform.localScale.x);
         transform.position = new Vector3(xInitial,_defaultPosition.y,_defaultPosition.z);
 
-        // Initialise moving at 60 degrees either up or down
-        // Assumes the player is on the left and fires towards the player that lost the last point
+        // Initialise moving at maximum angle degrees left or right
         var velRotation = Quaternion.Euler(0, 0, _settings.maximumBallAngle * Mathf.Sign(Random.value - 0.5f));
-        Velocity = velRotation * new Vector3((playerLost ? -1 : 1) * _speed,0);
+        Velocity = velRotation * new Vector3(0,-_speed);
 
         StartCoroutine(ResetWait(skipWait ? 0 : _settings.resetWait));
     }
@@ -65,19 +57,23 @@ public class BreakoutBall : Ball
             Velocity = BallBehaviours.VelocityAfterPaddleCollision(Velocity, hit.point, hit.transform);
             Velocity = BallBehaviours.ApplyAngleLimitToVector(Velocity, _settings.maximumBallAngle, hit.transform.up);
             PlayBounceNoise();
+            _blockCollisionsEnabled = true;
         } else if (hit.collider.gameObject.CompareTag("BarrierHorizontal") || hit.collider.gameObject.CompareTag("BarrierVertical"))
         {
             Velocity = BallBehaviours.VelocityAfterWallCollision(Velocity, hit.normal);
             PlayBounceNoise();
+            _blockCollisionsEnabled |= hit.collider.gameObject.CompareTag("BarrierHorizontal");
         } else if (hit.collider.gameObject.CompareTag("DestructibleBlock"))
         {
+            // Disable collisions after hitting a block until the next ceiling / paddle hit
             if (!_blockCollisionsEnabled) { return; }
-            DestructibleScoringBlock block = hit.collider.gameObject.GetComponent<DestructibleScoringBlock>();
-            Velocity = BallBehaviours.VelocityAfterWallCollision(Velocity, hit.normal);
+            _blockCollisionsEnabled = false;
+            // Collisions with blocks only act in y so pretend the impact was purely along the y axis
+            Velocity = BallBehaviours.VelocityAfterWallCollision(Velocity, Vector3.down);
             PlayBounceNoise();
+
+            DestructibleScoringBlock block = hit.collider.gameObject.GetComponent<DestructibleScoringBlock>();
             if (block != null) { block.Damage(1, gameObject); }
-            // Disable collisions temporarily after hitting a block
-            StartCoroutine(BlockCollisionWait(_settings.blockCollisionWait));
         }
         Velocity = BallBehaviours.VelocityAfterSpeedLimit(Velocity, _speed, _speed);
     }
